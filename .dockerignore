@@ -1,0 +1,15 @@
+node_modules
+server/public
+web/dist
+data
+screenshots
+docs/samples
+.npm-cache
+.tmp-tests
+.git
+.gitignore
+*.log
+.env
+.env.local
+tools
+blog

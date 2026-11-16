@@ -1,0 +1,38 @@
+# One command deployment on a Linux server with Docker.
+#
+#   docker compose up -d --build
+#
+# The SQLite file lives in ./data so the container can be replaced without losing
+# the address book.
+
+services:
+  contactbook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: contactbook:1.0.0
+    container_name: contactbook
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+    environment:
+      PORT: "8080"
+      HOST: "0.0.0.0"
+      # Set the public origin before exposing the service, for example
+      # CORS_ORIGIN: "https://book.example.com"
+      CORS_ORIGIN: "*"
+      SQLITE_PATH: "/app/data/contactbook.db"
+      STATIC_DIR: "/app/server/public"
+      LOG_LEVEL: "info"
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:8080/api/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3

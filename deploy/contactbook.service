@@ -1,0 +1,39 @@
+# systemd unit for the non-Docker deployment.
+#
+#   sudo cp deploy/contactbook.service /etc/systemd/system/contactbook.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now contactbook
+#   sudo systemctl status contactbook
+#
+# The service runs as the unprivileged user `contactbook`; the repository is
+# expected at /opt/contactbook and was built with `npm ci && npm run build`.
+
+[Unit]
+Description=ContactBook address book
+Documentation=https://github.com/Clancy-lov-sq/832402111_contactbook
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=contactbook
+Group=contactbook
+WorkingDirectory=/opt/contactbook
+Environment=NODE_ENV=production
+Environment=PORT=8080
+Environment=HOST=127.0.0.1
+Environment=SQLITE_PATH=/opt/contactbook/data/contactbook.db
+Environment=STATIC_DIR=/opt/contactbook/server/public
+Environment=LOG_LEVEL=info
+ExecStart=/usr/bin/node server/src/server.js
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=10
+KillSignal=SIGTERM
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/opt/contactbook/data
+
+[Install]
+WantedBy=multi-user.target
