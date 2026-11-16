@@ -1,0 +1,253 @@
+{
+  "url": "http://127.0.0.1:8080",
+  "capturedAt": "2026-11-16T17:39:29.946Z",
+  "passed": 28,
+  "failed": 0,
+  "errors": 0,
+  "results": [
+    {
+      "label": "the book holds the seeded contacts",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "label": "one page shows twelve cards",
+      "expected": 12,
+      "actual": 12,
+      "passed": true
+    },
+    {
+      "label": "seven contacts are bookmarked",
+      "expected": 7,
+      "actual": 7,
+      "passed": true
+    },
+    {
+      "label": "the sidebar reports 54 contact methods",
+      "expected": 54,
+      "actual": 54,
+      "passed": true
+    },
+    {
+      "screenshot": "01-home.png"
+    },
+    {
+      "label": "the bookmark view lists seven contacts",
+      "expected": 7,
+      "actual": 7,
+      "passed": true
+    },
+    {
+      "label": "every card of the view is bookmarked",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "screenshot": "02-favorites.png"
+    },
+    {
+      "label": "six colleagues share the keyword",
+      "expected": 6,
+      "actual": 6,
+      "passed": true
+    },
+    {
+      "screenshot": "03-search.png"
+    },
+    {
+      "label": "the colleague group holds six contacts",
+      "expected": 6,
+      "actual": 6,
+      "passed": true
+    },
+    {
+      "label": "subtitle",
+      "value": "同事"
+    },
+    {
+      "screenshot": "04-group.png"
+    },
+    {
+      "label": "contact to star",
+      "value": {
+        "id": 11,
+        "name": "郑一鸣"
+      }
+    },
+    {
+      "label": "the star was stored",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "label": "the counter follows the star",
+      "expected": 8,
+      "actual": 8,
+      "passed": true
+    },
+    {
+      "label": "a confirmation toast is visible",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "screenshot": "05-bookmark-toast.png"
+    },
+    {
+      "label": "the drawer shows the right person",
+      "expected": "蒋文博",
+      "actual": "蒋文博",
+      "passed": true
+    },
+    {
+      "label": "the drawer lists every method",
+      "expected": 4,
+      "actual": 4,
+      "passed": true
+    },
+    {
+      "screenshot": "06-detail.png"
+    },
+    {
+      "label": "the form edits three contact methods",
+      "expected": 3,
+      "actual": 3,
+      "passed": true
+    },
+    {
+      "screenshot": "07-new-contact-form.png"
+    },
+    {
+      "label": "the e-mail format is explained",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "label": "validation message",
+      "value": "需要包含 @ 和域名，例如 name@example.com"
+    },
+    {
+      "screenshot": "08-form-validation.png"
+    },
+    {
+      "label": "the new contact is stored",
+      "expected": 21,
+      "actual": 21,
+      "passed": true
+    },
+    {
+      "label": "the new contact is bookmarked",
+      "expected": 9,
+      "actual": 9,
+      "passed": true
+    },
+    {
+      "label": "a success toast is visible",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "screenshot": "09-created-toast.png"
+    },
+    {
+      "label": "the menu offers both scopes",
+      "expected": 2,
+      "actual": 2,
+      "passed": true
+    },
+    {
+      "label": "menu items",
+      "value": [
+        "导出当前筛选 · 21 位",
+        "导出全部联系人 · 21 位"
+      ]
+    },
+    {
+      "screenshot": "10-export-menu.png"
+    },
+    {
+      "label": "the chosen file is shown",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "screenshot": "11-import-pick.png"
+    },
+    {
+      "label": "three contacts were created",
+      "expected": 3,
+      "actual": 3,
+      "passed": true
+    },
+    {
+      "label": "the duplicate row was skipped",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "label": "the invalid row was reported",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "label": "the workbook had five data rows",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "label": "failures",
+      "value": [
+        "“not-an-email”不是有效的邮箱格式"
+      ]
+    },
+    {
+      "screenshot": "12-import-report.png"
+    },
+    {
+      "label": "the imported contacts are in the book",
+      "expected": 24,
+      "actual": 24,
+      "passed": true
+    },
+    {
+      "label": "the weekly counter noticed the import",
+      "expected": 11,
+      "actual": 11,
+      "passed": true
+    },
+    {
+      "screenshot": "13-imported-grid.png"
+    },
+    {
+      "screenshot": "14-empty-state.png"
+    },
+    {
+      "label": "the mobile layout is a single column",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "screenshot": "15-mobile.png"
+    },
+    {
+      "label": "eleven contacts are bookmarked at the end",
+      "expected": 11,
+      "actual": 11,
+      "passed": true
+    },
+    {
+      "screenshot": "16-favorites-final.png"
+    }
+  ]
+}

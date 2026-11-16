@@ -18,8 +18,10 @@ logs/
 
 # test databases and capture intermediates
 .tmp-tests/
-screenshots/gif/
+.tmp-pip/
+screenshots/gif/frame-*.png
 screenshots/fixtures/
+screenshots/commit-history.html
 
 # local configuration
 .env
