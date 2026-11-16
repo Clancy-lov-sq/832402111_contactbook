@@ -479,7 +479,7 @@ async function createTemplateBuffer() {
     from: { row: 3, column: 1 },
     to: { row: 3, column: allColumns.length },
   };
-  worksheet.printArea = 'A1:S60';
+  worksheet.printArea = `A1:${lastColumnLetter(allColumns.length)}60`;
   worksheet.pageSetup = {
     orientation: 'landscape',
     fitToPage: true,
