@@ -1,4 +1,4 @@
-# 极限编程作业 — ContactBook 通讯录（收藏 · 多联系方式 · Excel 导入导出）
+﻿# 极限编程作业 — ContactBook 通讯录（收藏 · 多联系方式 · Excel 导入导出）
 
 > **学号：** 832402111　**姓名：** 陈宇林　**课程：** 软件工程（FZU-MU）
 > **仓库地址：** <https://github.com/Clancy-lov-sq/832402111_contactbook>
@@ -461,12 +461,12 @@ PASS  validator.test.js  0.21s
 
 | 贡献者 | 提交次数 | 贡献比例 |
 | --- | ---: | ---: |
-| 832402111（陈宇林） | 10 | 100% |
-| 合计 | 10 | 100% |
+| 832402111（陈宇林） | 11 | 100% |
+| 合计 | 11 | 100% |
 
 ![Git 提交历史](images/commits.png)
 
-> 上图由 `git log --graph --oneline` 的真实输出渲染（脚本 `tools/capture-commits.js`），渲染时仓库已有 9 次提交；第 10 次提交把这张图、`git log` 原始文本和发布指南一并补入，因此 GitHub 的 Commits 页面会看到 10 条记录，作者与顺序相同。提交顺序与每一条的目的如下：
+> 上图由 `git log` 的真实输出渲染（脚本 `tools/render-commits.py`），渲染时仓库已有 10 次提交；第 11 次提交把这张图、`git log` 原始文本、`LICENSE` 与文档修订一并补入，因此 GitHub 的 Commits 页面会看到 11 条记录，作者与顺序相同。提交顺序与每一条的目的如下：
 
 | # | 日期 | 提交说明 |
 | ---: | --- | --- |
@@ -479,7 +479,8 @@ PASS  validator.test.js  0.21s
 | 7 | 2026-11-15 | `docs: add README, coding standard, API and design documents` |
 | 8 | 2026-11-16 | `chore(deploy): add Docker, compose, nginx and systemd configuration` |
 | 9 | 2026-11-17 | `docs(blog): add the assignment blog, screenshots and demonstration` |
-| 10 | 2026-11-17 | `docs(blog): add the rendered commit history screenshot` |
+| 10 | 2026-11-17 | `fix(server): extend the template print area to every column` |
+| 11 | 2026-11-17 | `docs: refresh the documentation and add the commit history screenshot` |
 
 提交次数远多于作业要求的 3 次，并且每次提交对应一个可解释的阶段：先骨架、再存储、再业务、再导入导出、再测试、再前端、再文档、再部署、最后博客。
 

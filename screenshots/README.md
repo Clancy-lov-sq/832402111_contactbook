@@ -24,7 +24,7 @@ application — no image was edited by hand.
 | `17-export-workbook.png` | The generated workbook, rendered from the exported file | `libreoffice-kit render` on `screenshots/fixtures/export-demo.xlsx` |
 | `demo-running.gif` | 15 frame animated walk-through | `tools/capture-gif.js` + `tools/build-gif.py` |
 | `capture-results.json` | The 28 assertions of the capture run | `tools/capture.js` |
-| `commits.png` | The rendered `git log` history | `tools/capture-commits.js` |
+| `commits.png` | The rendered `git log` history | `tools/render-commits.py` |
 
 `capture-results.json` records the expected and the actual value of every
 assertion, so a reviewer can see what was checked instead of trusting the image

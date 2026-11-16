@@ -144,11 +144,12 @@ Body: the [contact payload](#2-shared-objects). `201`:
 { "success": true, "contact": { "id": 21, "name": "林澄月", "groupId": 2, "groupName": "朋友",
     "company": "厦门大学", "title": "软件工程", "avatarColor": "#ea580c", "isBookmarked": true,
     "bookmarkedAt": "2026-11-17 09:38:12", "createdAt": "2026-11-17 09:38:12",
-    "updatedAt": "2026-11-17 09:38:12", "methodCount": 3, "methods": [] } }
+    "updatedAt": "2026-11-17 09:38:12", "methodCount": 3,
+    "methods": [{ "id": 55, "type": "phone", "label": "手机", "value": "138 0000 8888", "isPrimary": true, "sortOrder": 0 }] } }
 ```
 
-`methods` is shortened above; the stored contact is returned exactly as a later
-`GET` would return it. Failure `400`:
+`methods` is shortened above (the contact has three); the stored contact is returned
+exactly as a later `GET` would return it. Failure `400`:
 
 ```json
 { "success": false, "error": "VALIDATION_INVALID_FIELD", "message": "The contact name is required",
@@ -165,7 +166,8 @@ Path `id`: positive integer. `200`:
 
 ```json
 { "success": true, "contact": { "id": 13, "name": "蒋文博", "groupId": 4, "groupName": "客户",
-    "isBookmarked": true, "bookmarkedAt": "2026-11-05 10:00:00", "methodCount": 4, "methods": [] } }
+    "isBookmarked": true, "bookmarkedAt": "2026-11-05 10:00:00", "methodCount": 4,
+    "methods": [{ "id": 35, "type": "phone", "label": "商务", "value": "139 1234 8888", "isPrimary": true, "sortOrder": 0 }] } }
 ```
 
 Failure `400`: `{"success":false,"error":"VALIDATION_INVALID_PARAMETER","message":"The contact id must be a positive integer"}`

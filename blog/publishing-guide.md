@@ -1,4 +1,4 @@
-# 发布与提交清单（Publishing guide）
+﻿# 发布与提交清单（Publishing guide）
 
 这份文件不是博客正文，而是**交作业前的操作手册**：把仓库推送到 GitHub、核对链接、把博客发到 CSDN、提交作业。所有命令都可以直接复制执行。
 
@@ -48,7 +48,7 @@ git push -u origin main
 
 ```bash
 git log --pretty=format:'%h|%ad|%an|%s' --date=format:'%Y-%m-%d %H:%M' > docs/git-history.txt
-node tools/capture-commits.js          # 需要本机有 Edge/Chrome
+python tools/render-commits.py
 cp screenshots/commits.png blog/images/commits.png
 ```
 

@@ -194,9 +194,8 @@ rows silently and at five slots per method type; method labels and the original
 bookmark/creation/update timestamps do not survive a round trip; duplicate detection
 is a heuristic; timestamps carry no timezone; `IF NOT EXISTS` is the only schema
 evolution; the interface is Chinese only; `CONTACT_DUPLICATE` and
-`IMPORT_NO_VALID_ROW` are declared but unused; `npm run export:sample` points at a
-missing file; the template print area `A1:S60` covers 19 of its 21 columns; the
-optional cloud deployment was not executed.
+`IMPORT_NO_VALID_ROW` are declared but unused; `npm run export:sample` needs a
+seeded database; the optional cloud deployment was not executed.
 
 Future work, in the order that would pay off: versioned migrations
 (`schema_version` + ordered scripts); optimistic concurrency (send `updatedAt`,

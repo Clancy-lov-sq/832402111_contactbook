@@ -216,9 +216,7 @@ verified (`npm test`, a capture run).
 - [ ] 2-space indent, single quotes, semicolons, trailing commas.
 - [ ] New behaviour has a test at the right layer (validator, service, Excel or API).
 - [ ] Errors are `AppError` with a code; no bare `throw new Error` for a user-facing rule.
-- [ ] SQL is parameterised; no string interpolation of request data.
-- [ ] `process.env` appears only in `config.js`; SQL only in the repository.
-- [ ] A component talks to the store, not to `fetch`.
-- [ ] User-facing strings are Chinese, API strings are English.
+- [ ] SQL is parameterised; `process.env` is read only in `config.js`.
+- [ ] A component talks to the store, not to `fetch`; strings are Chinese in the UI, English in the API.
 - [ ] New interface elements have `data-testid` and an accessible name.
 - [ ] `npm test` passes; screenshots are regenerated when the UI changes.

@@ -1,4 +1,8 @@
-﻿77e7a23|2026-11-14 23:40|Clancy-lov-sq|feat(web): build the Vue interface, store and design system
+﻿35557fe|2026-11-17 01:18|Clancy-lov-sq|fix(server): extend the template print area to every column
+1b8e87b|2026-11-17 01:05|Clancy-lov-sq|docs(blog): add the assignment blog, screenshots and demonstration
+d38e92b|2026-11-16 21:10|Clancy-lov-sq|chore(deploy): add Docker, compose, nginx and systemd configuration
+5c174a7|2026-11-15 20:30|Clancy-lov-sq|docs: add README, coding standard, API and design documents
+77e7a23|2026-11-14 23:40|Clancy-lov-sq|feat(web): build the Vue interface, store and design system
 d24b3b7|2026-11-13 22:05|Clancy-lov-sq|test(server): cover validation, service, Excel and the HTTP API
 5fce67b|2026-11-12 21:35|Clancy-lov-sq|feat(server): export and import Excel workbooks with a row report
 1adb497|2026-11-11 20:10|Clancy-lov-sq|feat(server): implement contact service, validation and REST API
