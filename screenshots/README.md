@@ -8,7 +8,7 @@ application — no image was edited by hand.
 | `01-home.png` | All contacts, twelve cards per page | `tools/capture.js` step 01 |
 | `02-favorites.png` | The bookmark view | step 02 |
 | `03-search.png` | Keyword search across names, companies and methods | step 03 |
-| `04-group.png` | Filtering by the “同事” group | step 04 |
+| `04-group.png` | Filtering by the “Colleagues” group | step 04 |
 | `05-bookmark-toast.png` | Starring a contact, counter and toast | step 05 |
 | `06-detail.png` | Detail drawer with four contact methods | step 06 |
 | `07-new-contact-form.png` | Create form with three contact methods | step 07 |

@@ -31,7 +31,7 @@ deviation is noted.
 | Line length | 100 columns soft limit; long template strings, inline SVG path data and long test literals are the accepted exceptions |
 | Blank lines | one between logical blocks, two never; imports grouped with a blank line between groups |
 | Encoding / EOL | UTF-8, LF |
-| Unicode | Chinese text only in user-facing strings (templates, messages, validation texts), never in identifiers |
+| Unicode | ASCII only: identifiers, comments, user-facing copy, Excel headers and import messages are English; no CJK characters in the source |
 
 ## 3. Modules and imports
 
@@ -217,6 +217,6 @@ verified (`npm test`, a capture run).
 - [ ] New behaviour has a test at the right layer (validator, service, Excel or API).
 - [ ] Errors are `AppError` with a code; no bare `throw new Error` for a user-facing rule.
 - [ ] SQL is parameterised; `process.env` is read only in `config.js`.
-- [ ] A component talks to the store, not to `fetch`; strings are Chinese in the UI, English in the API.
+- [ ] A component talks to the store, not to `fetch`; strings are English in the UI and in the API.
 - [ ] New interface elements have `data-testid` and an accessible name.
 - [ ] `npm test` passes; screenshots are regenerated when the UI changes.

@@ -20,7 +20,7 @@ Companions: [../README.md](../README.md) (operation), [API.md](API.md) (contract
 
 | Rubric item | Points | Implementation | Evidence |
 | --- | ---: | --- | --- |
-| Bookmark contacts | 25 | `is_bookmarked` + `bookmarked_at`, `PATCH /api/contacts/:id/bookmark`, optimistic star, "我的收藏" view, bookmark filter and sort, statistics | [`contactService.js`](../server/src/services/contactService.js), [`contactBook.js`](../web/src/store/contactBook.js), [`contactService.test.js`](../server/test/contactService.test.js), screenshots 02/05/16 |
+| Bookmark contacts | 25 | `is_bookmarked` + `bookmarked_at`, `PATCH /api/contacts/:id/bookmark`, optimistic star, "Favorites" view, bookmark filter and sort, statistics | [`contactService.js`](../server/src/services/contactService.js), [`contactBook.js`](../web/src/store/contactBook.js), [`contactService.test.js`](../server/test/contactService.test.js), screenshots 02/05/16 |
 | Multiple contact methods | 10 | `contact_method` child table, 7 types, label/primary/order, dynamic editor, detail drawer with copy and links | [`schema.js`](../server/src/db/schema.js), [`contactValidator.js`](../server/src/services/contactValidator.js), [`ContactFormDialog.vue`](../web/src/components/ContactFormDialog.vue), screenshots 06/07 |
 | Excel import and export | 25 | Workbook layout and styling, template, header detection, row validation, skip/update, savepoints, row report | [`excelService.js`](../server/src/services/excelService.js), [`importService.js`](../server/src/services/importService.js), [`excel.test.js`](../server/test/excel.test.js), [samples](samples), screenshots 10/12/17 |
 | Page style | 10 | Tokens, card grid, drawer, dialogs, toasts, empty/skeleton states, responsive breakpoints | [`main.css`](../web/src/styles/main.css), all screenshots |
@@ -35,7 +35,7 @@ was used.
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ Browser — Vue 3 SPA, Chinese UI                                            │
+│ Browser — Vue 3 SPA, English UI                                            │
 │  App.vue → AppSidebar, ContactCard, ContactDetailDrawer, FormDialog,       │
 │            ImportDialog, ConfirmDialog, EmptyState, ToastHost, AppIcon     │
 │  store/contactBook.js  one reactive store, all actions                     │
@@ -77,7 +77,7 @@ are testable without a socket.
 | `controllers/` | One service call per handler, the envelope, export headers, the missing-file check. |
 | `services/contactService.js` | Validation orchestration, group resolution/creation, transaction boundaries, bookmark semantics, listing, export query, metadata. |
 | `services/contactValidator.js` | Normalisation, all field errors at once, method rules, listing/id parsing, avatar palette. |
-| `services/excelService.js` | Export columns and styles, template, header detection/classification, import row parsing with Chinese reasons. |
+| `services/excelService.js` | Export columns and styles, template, header detection/classification, import row parsing with readable reasons. |
 | `services/importService.js` | Mode, duplicate detection, skip/merge/create, per-row error capture, report assembly. |
 | `db/database.js` | `DatabaseSync` facade, statement cache, nested transaction→savepoint, PRAGMAs. |
 | `db/schema.js` | DDL with `IF NOT EXISTS`, indexes, default groups. |
@@ -137,16 +137,16 @@ one-column change and the most frequent click.
 
 **Export.** Menu scope → `GET /api/contacts/export` with the current filters →
 `listForExport` (no pagination, hard cap 5000) → `createExportBuffer`: derive method
-slots (minimum per type, widen to the data, cap 5), build the `通讯录` sheet (title,
+slots (minimum per type, widen to the data, cap 5), build the `Contacts` sheet (title,
 header row 3, one row per contact, amber bookmarks, autofilter, freeze, landscape
-print area, `是,否` dropdown), serialise → headers `Content-Disposition`,
+print area, `Yes,No` dropdown), serialise → headers `Content-Disposition`,
 `X-Export-Row-Count`, `Cache-Control: no-store` → the browser saves the blob and
 toasts the real row count.
 
 **Import.** Dialog (`.xlsx` and 5 MB checked client-side) → multipart `file` +
 `mode` → multer memory → `ImportService.importBuffer`: validate mode →
 `parseImportWorkbook` (pick sheet, header within 15 rows, classify columns, per-row
-problems in Chinese, 2000-row cap) → one transaction; per row: find duplicate
+problems, 2000-row cap) → one transaction; per row: find duplicate
 (name + first method value) → skip, or merge non-empty cells and append methods, or
 create; each service call opens a savepoint, so a failing row rolls back only itself
 and the rest commit → report sorted by Excel row → dialog shows counters and rows,
@@ -163,7 +163,7 @@ and reloads the listing when anything was written. Parsing touches no database;
 | `BEGIN IMMEDIATE` + nested savepoints | Create/update/import are atomic; import can reject one row and keep the rest | A structural failure aborts the whole file |
 | Dynamic Excel slots with minimums | Lossless for phone/e-mail, readable for the rest, no fixed oversized layout | Layout depends on data, so import must read headers; five-slot cap drops a sixth value of one type |
 | Explicit `skip` / `update` duplicate modes | Silent merge is surprising; hard failure makes re-import useless | Name + first method is a heuristic, not an identity |
-| English API codes, Chinese report messages | A stable contract for clients; a report the user can act on | Two vocabularies; no language negotiation |
+| English API codes and report messages | A stable contract for clients; a report the user can act on | Two vocabularies; no language negotiation |
 | Validation mirrored on both sides | Fast feedback in the form, server remains the authority | Two copies can drift |
 | One reactive store, no Pinia/Vuex | One dataset, one refresh path, five runtime dependencies | Hard to split into independent views; no devtools time travel |
 | Hand-written CSS with tokens, no UI kit | Page style is graded and fully controlled; no icon font or network request | 2309 lines to maintain, global class names, hand-written accessibility |
@@ -193,7 +193,7 @@ development default); `PUT`/`PATCH` are last-write-wins; export is capped at 500
 rows silently and at five slots per method type; method labels and the original
 bookmark/creation/update timestamps do not survive a round trip; duplicate detection
 is a heuristic; timestamps carry no timezone; `IF NOT EXISTS` is the only schema
-evolution; the interface is Chinese only; `CONTACT_DUPLICATE` and
+evolution; the interface is English only; `CONTACT_DUPLICATE` and
 `IMPORT_NO_VALID_ROW` are declared but unused; `npm run export:sample` needs a
 seeded database; the optional cloud deployment was not executed.
 

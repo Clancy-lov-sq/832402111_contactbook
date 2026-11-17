@@ -1,6 +1,6 @@
 # ContactBook
 
-ContactBook is a Chinese-language address book web application built for the
+ContactBook is a English-language address book web application built for the
 "Extreme Programming" assignment of the Software Engineering course at FZU-MU: a
 contact holds a name, group, company data, a note and 0–10 typed contact methods,
 can be bookmarked, searched, filtered, paged, exported to Excel and imported from
@@ -11,15 +11,15 @@ ORM or native module is involved.
 | Item | Value |
 | --- | --- |
 | Assignment | Extreme Programming, CSDN community `2601_FZU-MU_SE`, deadline 2026-11-17 23:59 |
-| Course / work type | Software Engineering, FZU-MU; individual project (832402111, 陈宇林) |
-| Interface | Chinese (`zh-CN`); the API is English with stable error codes |
+| Course / work type | Software Engineering, FZU-MU; individual project (832402111, Chenyu Lin) |
+| Interface | English; the API answers stable error codes |
 | Runtime / storage | Node.js >= 22.5.0 (developed on 24.22.0); SQLite `data/contactbook.db` via built-in `node:sqlite` |
 | Tests | 78 tests in 4 files (all passing); 28 browser capture assertions |
 | Deployment | One process; container/systemd/nginx artifacts prepared, **not publicly deployed** |
 
 Related: [codestyle.md](codestyle.md) · [docs/API.md](docs/API.md) ·
 [docs/DESIGN.md](docs/DESIGN.md) · [deploy/README.md](deploy/README.md) ·
-[blog/assignment-blog.md](blog/assignment-blog.md) (Chinese report).
+[blog/assignment-blog.md](blog/assignment-blog.md) (report).
 
 ## Table of contents
 
@@ -38,7 +38,7 @@ Related: [codestyle.md](codestyle.md) · [docs/API.md](docs/API.md) ·
 ## 1. Overview
 
 - **Bookmarking (25 points).** A star on every card and in the drawer toggles
-  `is_bookmarked` and stamps `bookmarked_at`; a "我的收藏" view, sidebar counts and a
+  `is_bookmarked` and stamps `bookmarked_at`; a "Favorites" view, sidebar counts and a
   bookmark-first sort order expose it, and the state survives a restart.
 - **Multiple methods per contact (10 points).** `contact_method` holds 0–10 methods
   of seven types (`phone`, `email`, `wechat`, `qq`, `website`, `address`, `other`),
@@ -161,7 +161,7 @@ empty.
 
 | Table | Columns | Notes |
 | --- | --- | --- |
-| `contact_group` | `id` PK, `name` UNIQUE, `color`, `sort_order`, `created_at` | Sidebar groups; defaults 家人/朋友/同事/客户/其他. |
+| `contact_group` | `id` PK, `name` UNIQUE, `color`, `sort_order`, `created_at` | Sidebar groups; defaults Family/Friends/Colleagues/Clients/Others. |
 | `contact` | `id` PK, `name`, `group_id` FK → `contact_group` `ON DELETE SET NULL`, `company`, `title`, `note`, `avatar_color`, `is_bookmarked` 0/1, `bookmarked_at`, `created_at`, `updated_at` | Deleting a group keeps its contacts, ungrouped. |
 | `contact_method` | `id` PK, `contact_id` FK → `contact` `ON DELETE CASCADE`, `type` CHECK in the 7 types, `label`, `value`, `is_primary` 0/1, `sort_order` | No method can exist without its contact. |
 
@@ -200,7 +200,7 @@ Full reference: [docs/API.md](docs/API.md).
 `{ "success": true, ...payload }` or
 `{ "success": false, "error": <CODE>, "message": <English>, "detail"?, "fields"? }`;
 `fields` is `[{ field, code, message }]` with paths such as `methods[0].value`. The
-browser branches on `error` and translates it into Chinese. Listing filters are
+browser branches on `error` and maps it to a readable message. Listing filters are
 `keyword`, `groupId` (`0` = ungrouped), `bookmarked`, `methodType`, `sort`
 (`updated`|`created`|`name`|`bookmarked`), `page`, `pageSize`.
 
@@ -210,10 +210,10 @@ GET /api/contacts?bookmarked=true&sort=updated&page=1&pageSize=10
 
 ```json
 { "success": true,
-  "items": [{ "id": 13, "name": "蒋文博", "groupId": 4, "groupName": "客户", "company": "博远科技",
-              "title": "采购总监", "isBookmarked": true, "bookmarkedAt": "2026-11-05 10:00:00",
+  "items": [{ "id": 13, "name": "William Jiang", "groupId": 4, "groupName": "Clients", "company": "Boyuan Technology",
+              "title": "Procurement director", "isBookmarked": true, "bookmarkedAt": "2026-11-05 10:00:00",
               "createdAt": "2026-10-30 10:20:00", "updatedAt": "2026-11-15 11:30:00",
-              "methodCount": 4, "methods": [{ "id": 35, "type": "phone", "label": "商务",
+              "methodCount": 4, "methods": [{ "id": 35, "type": "phone", "label": "Business",
                 "value": "139 1234 8888", "isPrimary": true, "sortOrder": 0 }] }],
   "total": 20, "page": 1, "pageSize": 10, "totalPages": 2,
   "filters": { "keyword": "", "groupId": null, "bookmarked": true, "methodType": null, "sort": "updated" },
@@ -236,38 +236,38 @@ only `(contact_id, type, value)` is unique.
 
 ## 10. Excel import and export
 
-The sheet is `通讯录`: row 1 is a merged title, row 2 is empty, row 3 is the header,
+The sheet is `Contacts`: row 1 is a merged title, row 2 is empty, row 3 is the header,
 rows 4+ hold one contact each. The header is frozen, filtered, dark-filled and
 white-bold; bookmarked rows are amber; the print area is landscape, fit to width.
 
 | Column | Content | Column | Content |
 | --- | --- | --- | --- |
-| 1 | 序号 | 7 | 是否收藏 (`是`/`否`) |
-| 2 | 姓名 | 8 | 收藏时间 |
-| 3 | 分组 | 9…N | Method slots by type |
-| 4 | 公司 | N+1 | 创建时间 |
-| 5 | 职位 | N+2 | 更新时间 |
-| 6 | 备注 | | |
+| 1 | # | 7 | Bookmarked (`Yes`/`No`) |
+| 2 | Name | 8 | Bookmarked at |
+| 3 | Group | 9…N | Method slots by type |
+| 4 | Company | N+1 | Created at |
+| 5 | Title | N+2 | Updated at |
+| 6 | Note | | |
 
 Method slots follow the type order phone, e-mail, WeChat, QQ, website, address,
 other. Each type reserves a minimum (phone 2, e-mail 2, others 1), widens to the
 widest contact and caps at 5; a header is numbered only when its type has more than
-one slot (`电话1`, `电话2`, `微信`). The template
+one slot (`Phone 1`, `Phone 2`, `WeChat`). The template
 ([contactbook-import-template.xlsx](docs/samples/contactbook-import-template.xlsx))
 offers 3 phone + 3 e-mail + one column per other type (21 columns), dropdowns for
-`是否收藏` and `分组`, and a `填写说明` sheet; the committed
+`Bookmarked` and `Group`, and a `Instructions` sheet; the committed
 [contactbook-export-sample.xlsx](docs/samples/contactbook-export-sample.xlsx) is a
 real 19-column export of the 24 demo contacts.
 
 Import rules: `.xlsx` only, multipart field `file`, optional `mode=skip|update`; the
-sheet `通讯录` is preferred, otherwise the first sheet; the header is the first row
+sheet `Contacts` is preferred, otherwise the first sheet; the header is the first row
 within 15 rows containing a name column; column order is free, English aliases are
-accepted, unknown columns are ignored and reported. `姓名` is required; phone,
+accepted, unknown columns are ignored and reported. `Name` is required; phone,
 e-mail, QQ, website and WeChat values are validated, duplicate methods and an
-eleventh method reject the row, `是否收藏` accepts `是/否/true/false/1/0/yes/no/收藏`,
+eleventh method reject the row, `Bookmarked` accepts `Yes/No/true/false/1/0`,
 and an unknown group name is created. Empty rows are skipped; the file is limited to
 2000 rows and 5 MB; every row is reported as `created`, `updated`, `skipped` or
-`failed` with a Chinese message and its Excel row number. The file runs in one
+`failed` with a readable message and its Excel row number. The file runs in one
 transaction while each row writes through a nested savepoint, so a failing row rolls
 back only itself.
 
@@ -296,11 +296,11 @@ to `body`.
 | `ContactDetailDrawer.vue` / `ContactFormDialog.vue` | All methods with copy and `tel:`/`mailto:`/website links; dynamic method editor with field errors keyed like the API. |
 | `ImportDialog.vue` and the small components | Import report; confirmation, empty states, toast host, inline SVG icons. |
 | `store/contactBook.js` | The single reactive store and actions; one `loadContacts` refresh path; optimistic bookmark with rollback. |
-| `api/client.js` + `utils/errorMessages.js` | The only HTTP client (envelope, `ApiError`, blob download); Chinese text per error code. |
+| `api/client.js` + `utils/errorMessages.js` | The only HTTP client (envelope, `ApiError`, blob download); one message per error code. |
 | `styles/main.css` | Design system: 2309 lines, tokens on `:root`, BEM-ish classes. |
 
 Design tokens cover ink/surfaces, brand and semantic colours (`--brand` `#4f46e5`,
-amber for bookmarks), radii 8/12/16/22 px, four shadows, a 268 px sidebar, Chinese
+amber for bookmarks), radii 8/12/16/22 px, four shadows, a 268 px sidebar, a system font stack for English
 font stacks and a 160 ms transition. The grid is
 `repeat(auto-fill, minmax(302px, 1fr))`; at 1180 px the sidebar narrows, at 960 px
 the shell stacks and the sidebar becomes a horizontal bar, at 620 px the grid and
@@ -387,7 +387,7 @@ the public origin and put TLS in front of it.
 | `/` returns a JSON 404 | `server/public` is missing or `SERVE_STATIC=false`; run `npm run build`. |
 | CORS error from 5173 | Use `npm run dev:web` (proxy) or set `CORS_ORIGIN=http://127.0.0.1:5173`. |
 | Import answers 413 / 415 | Larger than 5 MB / not an `.xlsx` workbook; split the file or save it as `.xlsx`. |
-| Import answers 422 `IMPORT_HEADER_MISSING` | No name column in the first 15 rows; remove content above the header or add `姓名`. |
+| Import answers 422 `IMPORT_HEADER_MISSING` | No name column in the first 15 rows; remove content above the header or add `Name`. |
 | Import answers 400 `IMPORT_FILE_REQUIRED` | The multipart field must be named `file`. |
 | Rows reported as failed | The message names the Excel row and the reason; fix that row and re-import — the other rows committed. |
 | `SQLITE_BUSY` / `STORAGE_FAILURE` | A second writer holds the lock; stop it and do not copy the database while it writes. |
@@ -401,7 +401,7 @@ the public origin and put TLS in front of it.
   labels and the original bookmark/creation/update timestamps do not survive a
   round trip; duplicate detection is a heuristic (name + first method).
 - Timestamps are local time without a timezone, the schema has no versioned
-  migrations, and the interface is Chinese only.
+  migrations, and the interface is English only.
 - `CONTACT_DUPLICATE` (409) and `IMPORT_NO_VALID_ROW` (422) are declared but not
   raised; `npm run export:sample` needs a seeded database (`npm run seed:reset`).
 - The optional cloud deployment was not executed.
@@ -409,9 +409,9 @@ the public origin and put TLS in front of it.
 ## 17. Assignment context and license
 
 Course: Software Engineering, FZU-MU; assignment: Extreme Programming, CSDN community
-`2601_FZU-MU_SE`; deadline 2026-11-17 23:59; individual project by 832402111 陈宇林.
+`2601_FZU-MU_SE`; deadline 2026-11-17 23:59; individual project by 832402111 Chenyu Lin.
 Rubric: bookmarking 25, multiple methods 10, Excel 25, page style 10, optional cloud
-deployment 15 (not claimed); the Chinese report is
+deployment 15 (not claimed); the blog post is
 [blog/assignment-blog.md](blog/assignment-blog.md).
 
 License: MIT, as declared in `package.json` and in the [LICENSE](LICENSE) file.

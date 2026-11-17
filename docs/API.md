@@ -3,7 +3,7 @@
 The service exposes a JSON API under `/api` on the same origin as the page
 (`http://127.0.0.1:8080/api`; the Vite dev server proxies `/api` to 8080). API
 version 1.0.0. Envelope messages are English and stable error codes are the
-contract; the browser translates them into Chinese. Related:
+contract; the browser displays them with an English message. Related:
 [../README.md](../README.md), [DESIGN.md](DESIGN.md).
 
 ## 1. Conventions
@@ -16,7 +16,7 @@ contract; the browser translates them into Chinese. Related:
 | `detail` | Optional machine-readable context (an id, a sheet name, a reason). Never a stack trace, path or SQL fragment. |
 | Timestamps | `YYYY-MM-DD HH:MM:SS`, server local time, read-only. |
 | Ids | Positive integers; `abc`, `0` or `1.5` answer 400, not 404. |
-| Booleans | Responses use JSON booleans; requests accept `true/false`, `1/0`, `"true"/"false"`, `"yes"/"no"`, `"是"/"否"`. |
+| Booleans | Responses use JSON booleans; requests accept `true/false`, `1/0`, `"true"/"false"`, `"yes"/"no"`, `"Yes"/"No"`. |
 | Pagination | `page` (default 1), `pageSize` (default 24, clamped to 1–100); response `page`, `pageSize`, `total`, `totalPages` (min 1). |
 | Sorting | `sort=updated` (default), `created`, `name`, `bookmarked`. |
 | Limits | JSON body 1 MB; workbook 5 MB, one file, parsed in memory; unknown JSON fields are ignored. |
@@ -98,12 +98,12 @@ No parameters. `200`:
 
 ```json
 { "success": true,
-  "methodTypes": [{ "type": "phone", "label": "电话", "labelEn": "Phone", "excelPrefix": "电话",
+  "methodTypes": [{ "type": "phone", "label": "Phone", "labelEn": "Phone", "excelPrefix": "Phone",
                     "placeholder": "138 0000 0000", "minSlots": 2, "validator": "phone" }],
-  "groups": [{ "id": 1, "name": "家人", "color": "#ef4444", "sortOrder": 10, "contactCount": 2 }],
+  "groups": [{ "id": 1, "name": "Family", "color": "#ef4444", "sortOrder": 10, "contactCount": 2 }],
   "stats": { "total": 20, "bookmarked": 7, "methodCount": 54, "updatedLastWeek": 11, "groups": [], "methodsByType": [] },
   "limits": {}, "pageSizes": [12, 24, 48, 96],
-  "sortOptions": [{ "value": "updated", "label": "最近更新" }, { "value": "bookmarked", "label": "收藏优先" }] }
+  "sortOptions": [{ "value": "updated", "label": "Last updated" }, { "value": "bookmarked", "label": "Favorites first" }] }
 ```
 
 Seven method types, all groups and the full limits object are returned; the example
@@ -123,11 +123,11 @@ is shortened. Failure: none of its own.
 `200`:
 
 ```json
-{ "success": true, "items": [{ "id": 13, "name": "蒋文博", "groupId": 4, "groupName": "客户",
-    "groupColor": "#10b981", "company": "博远科技", "title": "采购总监", "note": "重点客户…",
+{ "success": true, "items": [{ "id": 13, "name": "William Jiang", "groupId": 4, "groupName": "Clients",
+    "groupColor": "#10b981", "company": "Boyuan Technology", "title": "Procurement director", "note": "Key account; quotes by e-mail, holiday greetings.",
     "avatarColor": "#ca8a04", "isBookmarked": true, "bookmarkedAt": "2026-11-05 10:00:00",
     "createdAt": "2026-10-30 10:20:00", "updatedAt": "2026-11-15 11:30:00", "methodCount": 4,
-    "methods": [{ "id": 35, "type": "phone", "label": "商务", "value": "139 1234 8888", "isPrimary": true, "sortOrder": 0 }] }],
+    "methods": [{ "id": 35, "type": "phone", "label": "Business", "value": "139 1234 8888", "isPrimary": true, "sortOrder": 0 }] }],
   "total": 20, "page": 1, "pageSize": 24, "totalPages": 1,
   "filters": { "keyword": "", "groupId": null, "bookmarked": false, "methodType": null, "sort": "updated" },
   "stats": { "total": 20, "bookmarked": 7, "methodCount": 54, "updatedLastWeek": 11 } }
@@ -141,11 +141,11 @@ Failure `400`: `{"success":false,"error":"VALIDATION_INVALID_PARAMETER","message
 Body: the [contact payload](#2-shared-objects). `201`:
 
 ```json
-{ "success": true, "contact": { "id": 21, "name": "林澄月", "groupId": 2, "groupName": "朋友",
-    "company": "厦门大学", "title": "软件工程", "avatarColor": "#ea580c", "isBookmarked": true,
+{ "success": true, "contact": { "id": 21, "name": "Alex Chen", "groupId": 2, "groupName": "Friends",
+    "company": "Xiamen University", "title": "Software engineering", "avatarColor": "#ea580c", "isBookmarked": true,
     "bookmarkedAt": "2026-11-17 09:38:12", "createdAt": "2026-11-17 09:38:12",
     "updatedAt": "2026-11-17 09:38:12", "methodCount": 3,
-    "methods": [{ "id": 55, "type": "phone", "label": "手机", "value": "138 0000 8888", "isPrimary": true, "sortOrder": 0 }] } }
+    "methods": [{ "id": 55, "type": "phone", "label": "Mobile", "value": "138 0000 8888", "isPrimary": true, "sortOrder": 0 }] } }
 ```
 
 `methods` is shortened above (the contact has three); the stored contact is returned
@@ -165,9 +165,9 @@ above 1 MB, 500 `INTERNAL_ERROR`. Contact-level uniqueness is not enforced.
 Path `id`: positive integer. `200`:
 
 ```json
-{ "success": true, "contact": { "id": 13, "name": "蒋文博", "groupId": 4, "groupName": "客户",
+{ "success": true, "contact": { "id": 13, "name": "William Jiang", "groupId": 4, "groupName": "Clients",
     "isBookmarked": true, "bookmarkedAt": "2026-11-05 10:00:00", "methodCount": 4,
-    "methods": [{ "id": 35, "type": "phone", "label": "商务", "value": "139 1234 8888", "isPrimary": true, "sortOrder": 0 }] } }
+    "methods": [{ "id": 35, "type": "phone", "label": "Business", "value": "139 1234 8888", "isPrimary": true, "sortOrder": 0 }] } }
 ```
 
 Failure `400`: `{"success":false,"error":"VALIDATION_INVALID_PARAMETER","message":"The contact id must be a positive integer"}`
@@ -197,7 +197,7 @@ Body `{ "bookmarked": true }` (boolean-like; `isBookmarked` is an alias when
 clearing sets `bookmarked_at` to null. `200`:
 
 ```json
-{ "success": true, "contact": { "id": 13, "name": "蒋文博", "isBookmarked": true, "bookmarkedAt": "2026-11-17 09:41:02" },
+{ "success": true, "contact": { "id": 13, "name": "William Jiang", "isBookmarked": true, "bookmarkedAt": "2026-11-17 09:41:02" },
   "stats": { "total": 20, "bookmarked": 8, "methodCount": 54, "updatedLastWeek": 12 } }
 ```
 
@@ -226,7 +226,7 @@ Also 500 `EXPORT_FAILED`.
 No parameters. `200` with
 `Content-Disposition: attachment; filename="contactbook-import-template.xlsx"` and
 the 21-column template (3 phone + 3 e-mail slots, one per other type, dropdowns,
-`填写说明` sheet, no data rows). Failure: 500 `EXPORT_FAILED`.
+`Instructions` sheet, no data rows). Failure: 500 `EXPORT_FAILED`.
 
 ### 4.12 POST /api/contacts/import
 
@@ -235,17 +235,17 @@ the 21-column template (3 phone + 3 e-mail slots, one per other type, dropdowns,
 with `report.failed = report.totalRows`. `200`:
 
 ```json
-{ "success": true, "report": { "mode": "skip", "sheetName": "通讯录", "headerRow": 1, "totalRows": 5,
+{ "success": true, "report": { "mode": "skip", "sheetName": "Contacts", "headerRow": 1, "totalRows": 5,
     "created": 3, "updated": 0, "skipped": 1, "failed": 1, "imported": 3, "groupsCreated": 0,
-    "columns": [{ "column": 1, "header": "姓名", "target": "name" }, { "column": 7, "header": "电话1", "target": "phone[1]" }],
-    "ignoredColumns": [{ "column": 12, "header": "内部编号" }],
-    "rows": [{ "row": 2, "name": "周予安", "status": "created", "message": "已新增联系人 #21（4 条联系方式）" },
-             { "row": 6, "name": "邮箱写错的示例", "status": "failed", "message": "“not-an-email”不是有效的邮箱格式" }] },
+    "columns": [{ "column": 1, "header": "Name", "target": "name" }, { "column": 7, "header": "Phone 1", "target": "phone[1]" }],
+    "ignoredColumns": [{ "column": 12, "header": "Internal ID" }],
+    "rows": [{ "row": 2, "name": "Fiona Zhou", "status": "created", "message": "Created contact #21 with 4 contact method(s)" },
+             { "row": 6, "name": "Broken Email Sample", "status": "failed", "message": "'not-an-email' is not a valid email value" }] },
   "stats": { "total": 24, "bookmarked": 11, "methodCount": 69 } }
 ```
 
 `rows[].status` is `created`, `updated`, `skipped` or `failed`; `rows[].message` is
-Chinese for the person fixing the workbook. `columns`/`rows` are shortened above.
+readable text for the person fixing the workbook. `columns`/`rows` are shortened above.
 Failure `400`:
 `{"success":false,"error":"IMPORT_FILE_REQUIRED","message":"No file was uploaded under the field name \"file\""}`
 Also 400 `VALIDATION_INVALID_PARAMETER` (bad `mode`), 413 `IMPORT_FILE_TOO_LARGE`,
@@ -311,8 +311,8 @@ form can reject an obvious error before a request.
 BASE=http://127.0.0.1:8080/api
 curl -s "$BASE/health" | head -20
 curl -s -X POST "$BASE/contacts" -H 'Content-Type: application/json' \
-  -d '{"name":"林澄月","groupName":"朋友","methods":[{"type":"phone","value":"138 0000 8888","isPrimary":true}]}'
-curl -s "$BASE/contacts?keyword=云图&sort=name&page=1&pageSize=12"
+  -d '{"name":"Alex Chen","groupName":"Friends","methods":[{"type":"phone","value":"138 0000 8888","isPrimary":true}]}'
+curl -s "$BASE/contacts?keyword=Yuntu&sort=name&page=1&pageSize=12"
 curl -s -X PATCH "$BASE/contacts/13/bookmark" -H 'Content-Type: application/json' -d '{"bookmarked":true}'
 curl -s -D - -o contacts.xlsx "$BASE/contacts/export?bookmarked=true"
 curl -s -o template.xlsx "$BASE/contacts/template"

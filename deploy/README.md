@@ -94,9 +94,9 @@ does not remove it, and a new image can be deployed without touching the contact
 | `GET /api/health` | `"status": "ok"`, `"database.status": "connected"`, the stored contact count |
 | `GET /` | the address book page loads and the sidebar reports the contact count |
 | Create / edit / delete | the change survives a page reload |
-| Star a contact | the star is still filled after a reload, "我的收藏" counts it |
+| Star a contact | the star is still filled after a reload, "Favorites" counts it |
 | `GET /api/contacts/export` | an `.xlsx` file downloads, one contact per row |
-| Import the exported file with "更新已有" | the report says every row was updated and no row failed |
+| Import the exported file with "Update existing" | the report says every row was updated and no row failed |
 | Restart the service | the contacts are still there (SQLite file on disk) |
 
 ## 5. Operations
