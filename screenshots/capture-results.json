@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:8080",
-  "capturedAt": "2026-11-16T17:39:29.946Z",
+  "capturedAt": "2026-11-17T02:53:19.900Z",
   "passed": 28,
   "failed": 0,
   "errors": 0,
@@ -64,7 +64,7 @@
     },
     {
       "label": "subtitle",
-      "value": "同事"
+      "value": "Colleagues"
     },
     {
       "screenshot": "04-group.png"
@@ -73,7 +73,7 @@
       "label": "contact to star",
       "value": {
         "id": 11,
-        "name": "郑一鸣"
+        "name": "Victor Zheng"
       }
     },
     {
@@ -99,8 +99,8 @@
     },
     {
       "label": "the drawer shows the right person",
-      "expected": "蒋文博",
-      "actual": "蒋文博",
+      "expected": "William Jiang",
+      "actual": "William Jiang",
       "passed": true
     },
     {
@@ -129,7 +129,7 @@
     },
     {
       "label": "validation message",
-      "value": "需要包含 @ 和域名，例如 name@example.com"
+      "value": "Must contain @ and a domain, e.g. name@example.com"
     },
     {
       "screenshot": "08-form-validation.png"
@@ -164,8 +164,8 @@
     {
       "label": "menu items",
       "value": [
-        "导出当前筛选 · 21 位",
-        "导出全部联系人 · 21 位"
+        "Export filtered · 21 contacts",
+        "Export all contacts · 21 contacts"
       ]
     },
     {
@@ -207,7 +207,7 @@
     {
       "label": "failures",
       "value": [
-        "“not-an-email”不是有效的邮箱格式"
+        "\"not-an-email\" is not a valid email value"
       ]
     },
     {

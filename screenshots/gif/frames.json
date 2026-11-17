@@ -1,65 +1,65 @@
 {
-  "capturedAt": "2026-11-16T17:40:16.314Z",
+  "capturedAt": "2026-11-17T02:54:05.826Z",
   "frames": [
     {
       "file": "frame-01.png",
-      "label": "全部联系人：卡片里显示主要联系方式"
+      "label": "All contacts: cards show the primary methods"
     },
     {
       "file": "frame-02.png",
-      "label": "我的收藏：星标联系人集中显示"
+      "label": "Favorites: bookmarked contacts in one place"
     },
     {
       "file": "frame-03.png",
-      "label": "按分组筛选：同事"
+      "label": "Filter by group: Colleagues"
     },
     {
       "file": "frame-04.png",
-      "label": "搜索“云图”：姓名、公司、备注、联系方式统一匹配"
+      "label": "Search “Yuntu”: names, companies, notes and methods all match"
     },
     {
       "file": "frame-05.png",
-      "label": "详情抽屉：一位联系人的四条联系方式"
+      "label": "Detail drawer: four contact methods of one person"
     },
     {
       "file": "frame-06.png",
-      "label": "点击星标：收藏立即生效并给出提示"
+      "label": "Click the star: the bookmark is stored and confirmed"
     },
     {
       "file": "frame-07.png",
-      "label": "新建联系人：表单从一条电话开始"
+      "label": "New contact: the form starts with one phone row"
     },
     {
       "file": "frame-08.png",
-      "label": "填写姓名、公司与分组"
+      "label": "Fill in name, company and group"
     },
     {
       "file": "frame-09.png",
-      "label": "一位联系人可以有多条联系方式，并可设为主要"
+      "label": "One contact can hold several methods and a primary one"
     },
     {
       "file": "frame-10.png",
-      "label": "保存成功：新联系人出现在列表顶部"
+      "label": "Saved: the new contact appears at the top"
     },
     {
       "file": "frame-11.png",
-      "label": "导入：选择 .xlsx 工作簿（可拖入）"
+      "label": "Import: choose an .xlsx workbook (or drop it)"
     },
     {
       "file": "frame-12.png",
-      "label": "导入：选择“跳过重复”或“更新已有”"
+      "label": "Import: skip duplicates or update existing contacts"
     },
     {
       "file": "frame-13.png",
-      "label": "导入报告：新增、更新、跳过与失败逐行说明"
+      "label": "Import report: created, updated, skipped and failed rows"
     },
     {
       "file": "frame-14.png",
-      "label": "导入完成：列表与分组计数同步刷新"
+      "label": "Import finished: list and group counts refresh"
     },
     {
       "file": "frame-15.png",
-      "label": "收藏视图：整份通讯录里最重要的联系人"
+      "label": "Favorites: the contacts that matter most"
     }
   ]
 }

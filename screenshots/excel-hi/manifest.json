@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "backend": "native",
+  "rasterEngine": "pdfium",
+  "source": "saved",
+  "inputPath": "C:\\Users\\dell\\Documents\\deepseek-harness\\default-workspace\\832402111_contactbook\\screenshots\\fixtures\\export-demo.pdf",
+  "sourceSha256": "9c53bd370a8e5c040c6a45febe84035c4d842979e12af2148a2b4bd43b743b41",
+  "dpi": 220,
+  "pageCount": 1,
+  "images": [
+    {
+      "index": 1,
+      "page": 1,
+      "path": "C:\\Users\\dell\\Documents\\deepseek-harness\\default-workspace\\832402111_contactbook\\screenshots\\excel-hi\\page-0001.png",
+      "width": 2573,
+      "height": 1819,
+      "rectangle": {
+        "x": 0,
+        "y": 0,
+        "width": 1122.5333333333333,
+        "height": 793.7333333333333
+      },
+      "byteLength": 464231
+    }
+  ],
+  "missingFonts": []
+}

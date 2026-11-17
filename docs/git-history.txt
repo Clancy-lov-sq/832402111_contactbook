@@ -1,4 +1,7 @@
-﻿35557fe|2026-11-17 01:18|Clancy-lov-sq|fix(server): extend the template print area to every column
+﻿0ce907a|2026-11-17 10:05|Clancy-lov-sq|docs: rewrite the documentation and blog in English
+e987167|2026-11-17 09:40|Clancy-lov-sq|refactor(i18n): translate the application, dataset and tests to English
+6daedb1|2026-11-17 01:35|Clancy-lov-sq|docs: refresh the documentation and add the commit history screenshot
+35557fe|2026-11-17 01:18|Clancy-lov-sq|fix(server): extend the template print area to every column
 1b8e87b|2026-11-17 01:05|Clancy-lov-sq|docs(blog): add the assignment blog, screenshots and demonstration
 d38e92b|2026-11-16 21:10|Clancy-lov-sq|chore(deploy): add Docker, compose, nginx and systemd configuration
 5c174a7|2026-11-15 20:30|Clancy-lov-sq|docs: add README, coding standard, API and design documents
