@@ -47,7 +47,7 @@ async function request(path, options = {}) {
   try {
     response = await fetch(`${API_BASE}${path}`, { ...options, headers });
   } catch (error) {
-    throw new ApiError('无法连接后端服务，请确认服务已经启动', { code: 'NETWORK_UNREACHABLE' });
+    throw new ApiError('Cannot reach the backend — is it running?', { code: 'NETWORK_UNREACHABLE' });
   }
 
   const text = await response.text();
@@ -55,7 +55,7 @@ async function request(path, options = {}) {
   try {
     payload = text ? JSON.parse(text) : null;
   } catch (error) {
-    throw new ApiError('后端返回了无法解析的响应', {
+    throw new ApiError('The backend returned a response that could not be read', {
       code: 'INVALID_RESPONSE',
       status: response.status,
     });
@@ -63,7 +63,7 @@ async function request(path, options = {}) {
 
   if (!response.ok || (payload && payload.success === false)) {
     throw new ApiError(
-      (payload && payload.message) || `请求失败（HTTP ${response.status}）`,
+      (payload && payload.message) || `Request failed (HTTP ${response.status})`,
       {
         code: payload && payload.error,
         status: response.status,
@@ -164,7 +164,7 @@ export const api = {
       } catch (error) {
         payload = null;
       }
-      throw new ApiError((payload && payload.message) || '导出失败', {
+      throw new ApiError((payload && payload.message) || 'Export failed', {
         code: (payload && payload.error) || 'EXPORT_FAILED',
         status: response.status,
       });
@@ -185,7 +185,7 @@ export const api = {
   async downloadTemplate() {
     const response = await fetch(`${API_BASE}/contacts/template`);
     if (!response.ok) {
-      throw new ApiError('模板下载失败', { code: 'EXPORT_FAILED', status: response.status });
+      throw new ApiError('Could not download the template', { code: 'EXPORT_FAILED', status: response.status });
     }
     const disposition = response.headers.get('Content-Disposition') || '';
     const match = /filename="([^"]+)"/.exec(disposition);

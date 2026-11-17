@@ -5,7 +5,7 @@
  *
  *   node server/scripts/exportSample.js [output]
  *
- * It is the same pipeline the "导出全部联系人" button uses, so the committed sample
+ * It is the same pipeline the "export all contacts" button uses, so the committed sample
  * workbook always matches the current exporter instead of being a hand-made file.
  */
 

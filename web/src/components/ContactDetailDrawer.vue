@@ -53,9 +53,9 @@ async function copyValue(method) {
       document.execCommand('copy');
       textarea.remove();
     }
-    pushToast({ tone: 'success', title: '已复制', message: method.value, duration: 2200 });
+    pushToast({ tone: 'success', title: 'Copied', message: method.value, duration: 2200 });
   } catch (error) {
-    pushToast({ tone: 'error', title: '复制失败', message: '浏览器不允许访问剪贴板' });
+    pushToast({ tone: 'error', title: 'Copy failed', message: 'The browser does not allow clipboard access' });
   }
 }
 
@@ -82,18 +82,18 @@ function deleteCurrent() {
         class="drawer"
         role="dialog"
         aria-modal="true"
-        :aria-label="`${contact.name} 的联系方式`"
+        :aria-label="`Contact methods for ${contact.name}`"
         data-testid="detail-drawer"
       >
         <header class="drawer__head">
           <div class="drawer__top">
-            <span class="drawer__eyebrow">联系人详情</span>
+            <span class="drawer__eyebrow">Contact details</span>
             <div class="drawer__actions">
               <button
                 type="button"
                 class="icon-button"
-                title="编辑联系人"
-                aria-label="编辑联系人"
+                title="Edit contact"
+                aria-label="Edit contact"
                 data-testid="detail-edit"
                 @click="editCurrent"
               >
@@ -102,8 +102,8 @@ function deleteCurrent() {
               <button
                 type="button"
                 class="icon-button"
-                title="关闭"
-                aria-label="关闭详情"
+                title="Close"
+                aria-label="Close details"
                 data-testid="detail-close"
                 @click="closeDetail"
               >
@@ -122,7 +122,7 @@ function deleteCurrent() {
                 </span>
               </div>
               <p class="drawer__role">
-                {{ [contact.company, contact.title].filter(Boolean).join(' · ') || '未填写公司与职位' }}
+                {{ [contact.company, contact.title].filter(Boolean).join(' · ') || 'No company or title' }}
               </p>
             </div>
           </div>
@@ -131,8 +131,8 @@ function deleteCurrent() {
         <div class="drawer__body">
           <section>
             <div class="section-label">
-              <span>联系方式</span>
-              <span>{{ methods.length }} 条</span>
+              <span>Contact methods</span>
+              <span>{{ methods.length }}</span>
             </div>
             <div class="method-list">
               <div
@@ -153,7 +153,7 @@ function deleteCurrent() {
                   <div class="method-row__meta">
                     <span>{{ methodStyle(method.type).label }}</span>
                     <span v-if="method.label">· {{ method.label }}</span>
-                    <span v-if="method.isPrimary" class="method__primary">主要</span>
+                    <span v-if="method.isPrimary" class="method__primary">Primary</span>
                   </div>
                   <p class="method-row__value">{{ method.value }}</p>
                 </div>
@@ -161,8 +161,8 @@ function deleteCurrent() {
                   <button
                     type="button"
                     class="icon-button"
-                    title="复制"
-                    aria-label="复制"
+                    title="Copy"
+                    aria-label="Copy"
                     @click="copyValue(method)"
                   >
                     <AppIcon name="copy" />
@@ -173,58 +173,58 @@ function deleteCurrent() {
                     :href="methodLink(method)"
                     target="_blank"
                     rel="noopener"
-                    title="打开"
-                    aria-label="打开"
+                    title="Open"
+                    aria-label="Open"
                   >
                     <AppIcon name="arrowRight" />
                   </a>
                 </div>
               </div>
-              <p v-if="methods.length === 0" class="muted">这位联系人还没有添加联系方式。</p>
+              <p v-if="methods.length === 0" class="muted">This contact has no contact methods yet.</p>
             </div>
           </section>
 
           <section v-if="contact.note">
-            <div class="section-label"><span>备注</span></div>
+            <div class="section-label"><span>Notes</span></div>
             <p class="note-block">{{ contact.note }}</p>
           </section>
 
           <section>
-            <div class="section-label"><span>基本信息</span></div>
+            <div class="section-label"><span>Details</span></div>
             <div class="meta-grid">
               <div class="meta-cell">
-                <p class="meta-cell__label">公司</p>
+                <p class="meta-cell__label">Company</p>
                 <p class="meta-cell__value">{{ contact.company || '—' }}</p>
               </div>
               <div class="meta-cell">
-                <p class="meta-cell__label">职位</p>
+                <p class="meta-cell__label">Title</p>
                 <p class="meta-cell__value">{{ contact.title || '—' }}</p>
               </div>
               <div class="meta-cell">
-                <p class="meta-cell__label">分组</p>
-                <p class="meta-cell__value">{{ contact.groupName || '未分组' }}</p>
+                <p class="meta-cell__label">Group</p>
+                <p class="meta-cell__value">{{ contact.groupName || 'No group' }}</p>
               </div>
               <div class="meta-cell">
-                <p class="meta-cell__label">联系方式</p>
-                <p class="meta-cell__value">{{ methods.length }} 条</p>
+                <p class="meta-cell__label">Methods</p>
+                <p class="meta-cell__value">{{ methods.length }}</p>
               </div>
             </div>
           </section>
 
           <section>
-            <div class="section-label"><span>记录时间</span></div>
+            <div class="section-label"><span>Timeline</span></div>
             <div class="timeline">
               <div class="timeline__row">
                 <span class="timeline__dot" />
-                <span>创建于 {{ formatDateTime(contact.createdAt, true) }}</span>
+                <span>Created {{ formatDateTime(contact.createdAt, true) }}</span>
               </div>
               <div class="timeline__row">
                 <span class="timeline__dot timeline__dot--brand" />
-                <span>最近更新 {{ formatDateTime(contact.updatedAt, true) }}</span>
+                <span>Updated {{ formatDateTime(contact.updatedAt, true) }}</span>
               </div>
               <div v-if="contact.bookmarkedAt" class="timeline__row">
                 <span class="timeline__dot timeline__dot--amber" />
-                <span>收藏于 {{ formatDateTime(contact.bookmarkedAt, true) }}</span>
+                <span>Bookmarked {{ formatDateTime(contact.bookmarkedAt, true) }}</span>
               </div>
             </div>
           </section>
@@ -238,7 +238,7 @@ function deleteCurrent() {
             @click="deleteCurrent"
           >
             <AppIcon name="trash" />
-            删除联系人
+            Delete contact
           </button>
           <button
             type="button"
@@ -248,7 +248,7 @@ function deleteCurrent() {
             @click="toggleBookmark(contact)"
           >
             <AppIcon name="star" />
-            {{ contact.isBookmarked ? '已收藏，点击取消' : '加入收藏' }}
+            {{ contact.isBookmarked ? 'Bookmarked · click to remove' : 'Add to favorites' }}
           </button>
         </footer>
       </aside>

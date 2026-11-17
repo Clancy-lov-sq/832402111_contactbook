@@ -12,11 +12,11 @@ const { methodTypeSqlList } = require('../utils/methodTypes');
 
 /** Groups every new installation starts with; they may be renamed or extended. */
 const DEFAULT_GROUPS = Object.freeze([
-  Object.freeze({ name: '家人', color: '#ef4444', sortOrder: 10 }),
-  Object.freeze({ name: '朋友', color: '#f59e0b', sortOrder: 20 }),
-  Object.freeze({ name: '同事', color: '#3b82f6', sortOrder: 30 }),
-  Object.freeze({ name: '客户', color: '#10b981', sortOrder: 40 }),
-  Object.freeze({ name: '其他', color: '#64748b', sortOrder: 90 }),
+  Object.freeze({ name: 'Family', color: '#ef4444', sortOrder: 10 }),
+  Object.freeze({ name: 'Friends', color: '#f59e0b', sortOrder: 20 }),
+  Object.freeze({ name: 'Colleagues', color: '#3b82f6', sortOrder: 30 }),
+  Object.freeze({ name: 'Clients', color: '#10b981', sortOrder: 40 }),
+  Object.freeze({ name: 'Others', color: '#64748b', sortOrder: 90 }),
 ]);
 
 /**

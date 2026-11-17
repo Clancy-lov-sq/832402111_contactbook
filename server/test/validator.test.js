@@ -59,18 +59,18 @@ test('a contact name is required', () => {
 });
 
 test('the name is trimmed and inner whitespace is collapsed', () => {
-  const contact = normalize({ name: '  林   澄月  ' });
-  assert.equal(contact.name, '林 澄月');
+  const contact = normalize({ name: '  Alex   Chen  ' });
+  assert.equal(contact.name, 'Alex Chen');
 });
 
 test('a name longer than the limit is rejected', () => {
-  const error = expectError(() => normalize({ name: '名'.repeat(41) }));
+  const error = expectError(() => normalize({ name: 'name'.repeat(41) }));
   assert.equal(error.fields[0].code, 'VALIDATION_CONTACT_NAME_TOO_LONG');
 });
 
 test('several contact methods are accepted and the first becomes primary', () => {
   const contact = normalize({
-    name: '林澄月',
+    name: 'Alex Chen',
     methods: [
       { type: 'phone', value: '13800001111' },
       { type: 'email', value: 'chengyue@example.com' },
@@ -84,20 +84,20 @@ test('several contact methods are accepted and the first becomes primary', () =>
 
 test('an explicit primary method is kept and a second primary is cleared', () => {
   const contact = normalize({
-    name: '林澄月',
+    name: 'Alex Chen',
     methods: [
       { type: 'phone', value: '13800001111', isPrimary: false },
-      { type: 'email', value: 'chengyue@example.com', isPrimary: true, label: '常用' },
+      { type: 'email', value: 'chengyue@example.com', isPrimary: true, label: 'Primary' },
       { type: 'wechat', value: 'chengyue_lin', isPrimary: true },
     ],
   });
   assert.deepEqual(contact.methods.map((method) => method.isPrimary), [false, true, false]);
-  assert.equal(contact.methods[1].label, '常用');
+  assert.equal(contact.methods[1].label, 'Primary');
 });
 
 test('an unknown method type is rejected', () => {
   const error = expectError(
-    () => normalize({ name: '林澄月', methods: [{ type: 'telegram', value: '@lin' }] }),
+    () => normalize({ name: 'Alex Chen', methods: [{ type: 'telegram', value: '@lin' }] }),
   );
   assert.equal(error.fields[0].code, 'VALIDATION_METHOD_TYPE_UNKNOWN');
   assert.equal(error.fields[0].field, 'methods[0].type');
@@ -105,7 +105,7 @@ test('an unknown method type is rejected', () => {
 
 test('an empty method value is rejected', () => {
   const error = expectError(
-    () => normalize({ name: '林澄月', methods: [{ type: 'email', value: '   ' }] }),
+    () => normalize({ name: 'Alex Chen', methods: [{ type: 'email', value: '   ' }] }),
   );
   assert.equal(error.fields[0].code, 'VALIDATION_METHOD_VALUE_REQUIRED');
 });
@@ -138,7 +138,7 @@ test('a website may be a full URL or a bare domain', () => {
 test('the same method may not be listed twice', () => {
   const error = expectError(
     () => normalize({
-      name: '林澄月',
+      name: 'Alex Chen',
       methods: [
         { type: 'phone', value: '13800001111' },
         { type: 'phone', value: '13800001111' },
@@ -153,23 +153,23 @@ test('more methods than the limit are rejected', () => {
     type: 'phone',
     value: `1380000${String(index).padStart(4, '0')}`,
   }));
-  const error = expectError(() => normalize({ name: '林澄月', methods }));
+  const error = expectError(() => normalize({ name: 'Alex Chen', methods }));
   assert.equal(error.fields[0].code, 'VALIDATION_TOO_MANY_METHODS');
 });
 
 test('the bookmark flag only accepts a boolean shape', () => {
   assert.equal(parseBoolean(true), true);
   assert.equal(parseBoolean('false'), false);
-  assert.equal(parseBoolean('是'), true);
-  assert.equal(parseBoolean('否'), false);
+  assert.equal(parseBoolean('Yes'), true);
+  assert.equal(parseBoolean('No'), false);
   assert.equal(parseBoolean('maybe'), null);
-  const error = expectError(() => normalize({ name: '林澄月', isBookmarked: 'maybe' }));
+  const error = expectError(() => normalize({ name: 'Alex Chen', isBookmarked: 'maybe' }));
   assert.equal(error.fields[0].code, 'VALIDATION_INVALID_BOOKMARK');
 });
 
 test('an unknown group id is reported on the groupId field', () => {
   const error = expectError(() => normalizeContactInput(
-    { name: '林澄月', groupId: 404 },
+    { name: 'Alex Chen', groupId: 404 },
     {
       limits: {
         maxContactNameLength: 40,
@@ -188,8 +188,8 @@ test('an unknown group id is reported on the groupId field', () => {
 });
 
 test('the avatar colour is stable for one name', () => {
-  assert.equal(pickAvatarColor('林澄月'), pickAvatarColor('林澄月'));
-  assert.match(pickAvatarColor('林澄月'), /^#[0-9a-f]{6}$/);
+  assert.equal(pickAvatarColor('Alex Chen'), pickAvatarColor('Alex Chen'));
+  assert.match(pickAvatarColor('Alex Chen'), /^#[0-9a-f]{6}$/);
 });
 
 test('a contact id must be a positive integer', () => {
@@ -211,10 +211,10 @@ test('the listing query has safe defaults', () => {
 
 test('the listing query accepts a filter and a page', () => {
   const query = parseListQuery(
-    { keyword: '  苏  ', groupId: '2', bookmarked: 'true', sort: 'name', page: '3', pageSize: '12' },
+    { keyword: '  sophie  ', groupId: '2', bookmarked: 'true', sort: 'name', page: '3', pageSize: '12' },
     { limits: { defaultPageSize: 24, maxPageSize: 100, maxKeywordLength: 60 } },
   );
-  assert.equal(query.keyword, '苏');
+  assert.equal(query.keyword, 'sophie');
   assert.equal(query.groupId, 2);
   assert.equal(query.bookmarked, true);
   assert.equal(query.sort, 'name');

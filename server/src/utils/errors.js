@@ -90,7 +90,7 @@ const DEFAULT_MESSAGE = Object.freeze({
   IMPORT_FILE_UNSUPPORTED: 'Only .xlsx files exported from Excel are supported',
   IMPORT_FILE_TOO_LARGE: 'The uploaded workbook is too large',
   IMPORT_WORKBOOK_EMPTY: 'The workbook does not contain any row',
-  IMPORT_HEADER_MISSING: 'The workbook has no header row or no 姓名 (Name) column',
+  IMPORT_HEADER_MISSING: 'The workbook has no header row or no Name column',
   IMPORT_TOO_MANY_ROWS: 'The workbook contains more rows than the import limit',
   IMPORT_NO_VALID_ROW: 'The workbook contains no valid contact row',
   IMPORT_FAILED: 'The workbook could not be imported',

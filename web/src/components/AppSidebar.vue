@@ -29,7 +29,7 @@ const bookmarksActive = computed(() => book.filters.bookmarked);
 </script>
 
 <template>
-  <aside class="sidebar" aria-label="通讯录导航">
+  <aside class="sidebar" aria-label="Address book navigation">
     <div class="brand">
       <span class="brand__mark">
         <AppIcon name="users" />
@@ -39,11 +39,11 @@ const bookmarksActive = computed(() => book.filters.bookmarked);
           ContactBook
           <span class="brand__tag">v1</span>
         </p>
-        <p class="brand__caption">通讯录 · 收藏与 Excel 双向同步</p>
+        <p class="brand__caption">Address book · bookmarks and Excel sync</p>
       </div>
     </div>
 
-    <nav class="sidebar__section" aria-label="视图">
+    <nav class="sidebar__section" aria-label="Views">
       <button
         type="button"
         class="nav-item"
@@ -52,7 +52,7 @@ const bookmarksActive = computed(() => book.filters.bookmarked);
         @click="showAll()"
       >
         <span class="nav-item__icon"><AppIcon name="inbox" /></span>
-        <span class="nav-item__label">全部联系人</span>
+        <span class="nav-item__label">All contacts</span>
         <span class="nav-item__count">{{ total }}</span>
       </button>
       <button
@@ -63,13 +63,13 @@ const bookmarksActive = computed(() => book.filters.bookmarked);
         @click="showBookmarks()"
       >
         <span class="nav-item__icon"><AppIcon name="star" /></span>
-        <span class="nav-item__label">我的收藏</span>
+        <span class="nav-item__label">Favorites</span>
         <span class="nav-item__count">{{ bookmarked }}</span>
       </button>
     </nav>
 
     <div class="sidebar__section">
-      <p class="sidebar__label">分组</p>
+      <p class="sidebar__label">Groups</p>
       <button
         v-for="group in groups"
         :key="group.id"
@@ -90,25 +90,25 @@ const bookmarksActive = computed(() => book.filters.bookmarked);
     <div class="sidebar__spacer" />
 
     <div class="sidebar-card">
-      <p class="sidebar-card__title">本周动态</p>
+      <p class="sidebar-card__title">This week</p>
       <div class="sidebar-card__grid">
         <div>
           <p class="sidebar-card__value">{{ book.stats.updatedLastWeek }}</p>
-          <p class="sidebar-card__caption">更新过的联系人</p>
+          <p class="sidebar-card__caption">Contacts updated</p>
         </div>
         <div>
           <p class="sidebar-card__value">{{ book.stats.methodCount }}</p>
-          <p class="sidebar-card__caption">条联系方式</p>
+          <p class="sidebar-card__caption">Contact methods</p>
         </div>
       </div>
       <div class="sidebar-card__footer">
         <span class="pulse-dot" />
-        SQLite 数据库已连接
+        SQLite connected
       </div>
     </div>
 
     <p class="sidebar__hint">
-      按 <kbd>Ctrl</kbd> + <kbd>K</kbd> 直接搜索姓名、电话或邮箱。
+      Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to search.
     </p>
   </aside>
 </template>

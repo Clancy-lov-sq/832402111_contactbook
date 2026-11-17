@@ -148,8 +148,8 @@ step('02', 'The bookmark view', async () => {
 });
 
 step('03', 'Search across names, companies and methods', async () => {
-  await demo("search('云图')");
-  await waitFor('window.__contactbook.total === 6 && window.__contactbook.filters.keyword === "云图"');
+  await demo("search('Yuntu')");
+  await waitFor('window.__contactbook.total === 6 && window.__contactbook.filters.keyword === "Yuntu"');
   await waitIdle();
   const current = await state();
   check('six colleagues share the keyword', current.total, 6);
@@ -190,7 +190,7 @@ step('05', 'Starring a contact', async () => {
   const current = await state();
   check('the star was stored', current.items.find((item) => item.id === target.id).isBookmarked, true);
   check('the counter follows the star', current.stats.bookmarked, 8);
-  check('a confirmation toast is visible', current.toasts.some((toast) => toast.includes('已加入收藏')), true);
+  check('a confirmation toast is visible', current.toasts.some((toast) => toast.includes('Added to favorites')), true);
   await shot('05-bookmark-toast.png');
 });
 
@@ -202,7 +202,7 @@ step('06', 'The detail drawer with four contact methods', async () => {
     name: document.querySelector('[data-testid="detail-name"]').textContent.trim(),
     methods: document.querySelectorAll('[data-testid="detail-drawer"] .method-row').length,
   })`);
-  check('the drawer shows the right person', detail.name, '蒋文博');
+  check('the drawer shows the right person', detail.name, 'William Jiang');
   check('the drawer lists every method', detail.methods, 4);
   await shot('06-detail.png');
 });
@@ -211,18 +211,18 @@ step('07', 'Creating a contact with several methods', async () => {
   await demo('closeDetail()');
   await demo('openCreateForm()');
   await waitFor('window.__contactbook.form.open === true');
-  await demo("type('[data-testid=\"form-name\"]', '林澄月')");
-  await demo("type('[data-testid=\"form-company\"]', '厦门大学')");
-  await demo("type('[data-testid=\"form-title\"]', '软件工程')");
-  await demo("type('[data-testid=\"form-note\"]', '课程作业联系人，邮件优先')");
+  await demo("type('[data-testid=\"form-name\"]', 'Chloe Lau')");
+  await demo("type('[data-testid=\"form-company\"]', 'Xiamen University')");
+  await demo("type('[data-testid=\"form-title\"]', 'Software engineering')");
+  await demo("type('[data-testid=\"form-note\"]', 'Course project contact; email preferred')");
   await demo("select('[data-testid=\"form-group\"]', '2')");
-  await demo("type('[data-testid=\"method-label-0\"]', '手机')");
+  await demo("type('[data-testid=\"method-label-0\"]', 'Mobile')");
   await demo("type('[data-testid=\"method-value-0\"]', '138 0000 8888')");
   await demo("click('[data-testid=\"add-method-email\"]')");
-  await demo("type('[data-testid=\"method-label-1\"]', '常用')");
-  await demo("type('[data-testid=\"method-value-1\"]', 'chengyue.lin@example.com')");
+  await demo("type('[data-testid=\"method-label-1\"]', 'Work')");
+  await demo("type('[data-testid=\"method-value-1\"]', 'chloe.lau@example.com')");
   await demo("click('[data-testid=\"add-method-wechat\"]')");
-  await demo("type('[data-testid=\"method-value-2\"]', 'chengyue_lin')");
+  await demo("type('[data-testid=\"method-value-2\"]', 'chloe_lau')");
   await demo("click('[data-testid=\"form-bookmark\"]')");
   await sleep(300);
   const methodRows = await evaluate("document.querySelectorAll('.method-edit').length");
@@ -237,7 +237,7 @@ step('08', 'Client side validation of a method value', async () => {
   const message = await evaluate("document.querySelector('.method-edit__error').textContent.trim()");
   check(
     'the e-mail format is explained',
-    message.includes('需要包含 @'),
+    message.includes('Must contain @'),
     true,
   );
   note('validation message', message);
@@ -245,7 +245,7 @@ step('08', 'Client side validation of a method value', async () => {
 });
 
 step('09', 'Saving the new contact', async () => {
-  await demo("type('[data-testid=\"method-value-1\"]', 'chengyue.lin@example.com')");
+  await demo("type('[data-testid=\"method-value-1\"]', 'chloe.lau@example.com')");
   await demo("click('[data-testid=\"form-submit\"]')");
   await waitFor('window.__contactbook.form.open === false && window.__contactbook.total === 21');
   await waitIdle();
@@ -253,7 +253,7 @@ step('09', 'Saving the new contact', async () => {
   const current = await state();
   check('the new contact is stored', current.total, 21);
   check('the new contact is bookmarked', current.stats.bookmarked, 9);
-  check('a success toast is visible', current.toasts.some((toast) => toast.includes('联系人已添加')), true);
+  check('a success toast is visible', current.toasts.some((toast) => toast.includes('Contact created')), true);
   await shot('09-created-toast.png');
 });
 

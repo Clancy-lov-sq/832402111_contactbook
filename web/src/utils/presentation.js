@@ -8,13 +8,13 @@
 
 /** Icon name, label and accent colour of every method type. */
 export const METHOD_STYLE = Object.freeze({
-  phone: { label: '电话', icon: 'phone', color: '#2563eb', tint: 'rgba(37, 99, 235, 0.1)' },
-  email: { label: '邮箱', icon: 'mail', color: '#0891b2', tint: 'rgba(8, 145, 178, 0.1)' },
-  wechat: { label: '微信', icon: 'chat', color: '#16a34a', tint: 'rgba(22, 163, 74, 0.12)' },
+  phone: { label: 'Phone', icon: 'phone', color: '#2563eb', tint: 'rgba(37, 99, 235, 0.1)' },
+  email: { label: 'Email', icon: 'mail', color: '#0891b2', tint: 'rgba(8, 145, 178, 0.1)' },
+  wechat: { label: 'WeChat', icon: 'chat', color: '#16a34a', tint: 'rgba(22, 163, 74, 0.12)' },
   qq: { label: 'QQ', icon: 'penguin', color: '#0284c7', tint: 'rgba(2, 132, 199, 0.1)' },
-  website: { label: '网址', icon: 'globe', color: '#7c3aed', tint: 'rgba(124, 58, 237, 0.1)' },
-  address: { label: '地址', icon: 'pin', color: '#ea580c', tint: 'rgba(234, 88, 12, 0.1)' },
-  other: { label: '其他', icon: 'sparkles', color: '#64748b', tint: 'rgba(100, 116, 139, 0.12)' },
+  website: { label: 'Website', icon: 'globe', color: '#7c3aed', tint: 'rgba(124, 58, 237, 0.1)' },
+  address: { label: 'Address', icon: 'pin', color: '#ea580c', tint: 'rgba(234, 88, 12, 0.1)' },
+  other: { label: 'Other', icon: 'sparkles', color: '#64748b', tint: 'rgba(100, 116, 139, 0.12)' },
 });
 
 /**
@@ -94,7 +94,7 @@ export function formatDateTime(value, withYear = false) {
 }
 
 /**
- * A relative description of a timestamp ("今天 09:20", "3 天前", ...).
+ * A relative description of a timestamp ("Today 09:20", "3 days ago", ...).
  *
  * @param {string|null} value
  * @returns {string}
@@ -120,13 +120,13 @@ export function relativeTime(value) {
   const dayDifference = Math.round((startOfToday - startOfThen) / 86400000);
 
   if (dayDifference === 0) {
-    return `今天 ${match[4]}:${match[5]}`;
+    return `Today ${match[4]}:${match[5]}`;
   }
   if (dayDifference === 1) {
-    return `昨天 ${match[4]}:${match[5]}`;
+    return `Yesterday ${match[4]}:${match[5]}`;
   }
   if (dayDifference > 1 && dayDifference < 30) {
-    return `${dayDifference} 天前`;
+    return `${dayDifference} days ago`;
   }
   return `${match[1]}-${match[2]}-${match[3]}`;
 }

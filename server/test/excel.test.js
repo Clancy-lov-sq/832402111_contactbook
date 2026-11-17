@@ -45,7 +45,7 @@ async function expectRejection(callback) {
  */
 async function buildWorkbook(header, rows) {
   const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('通讯录');
+  const worksheet = workbook.addWorksheet('Contacts');
   worksheet.addRow(header);
   for (const row of rows) {
     worksheet.addRow(row);
@@ -63,7 +63,7 @@ test('the method columns provide the minimum slots of every type', () => {
   const columns = buildMethodColumns([]);
   assert.deepEqual(
     columns.map((column) => column.header),
-    ['电话1', '电话2', '邮箱1', '邮箱2', '微信', 'QQ', '网址', '地址', '其他'],
+    ['Phone 1', 'Phone 2', 'Email 1', 'Email 2', 'WeChat', 'QQ', 'Website', 'Address', 'Other'],
   );
 });
 
@@ -78,14 +78,14 @@ test('the method columns grow with the widest contact', () => {
       ],
     },
   ]);
-  assert.ok(columns.some((column) => column.header === '电话3'));
-  assert.ok(!columns.some((column) => column.header === '邮箱3'));
+  assert.ok(columns.some((column) => column.header === 'Phone 3'));
+  assert.ok(!columns.some((column) => column.header === 'Email 3'));
 });
 
 test('the export puts one contact per row and one value per column', () => withContext(async ({ contactService }) => {
-  contactService.create(sampleContact({ name: '导出甲', isBookmarked: true }));
+  contactService.create(sampleContact({ name: 'Export A', isBookmarked: true }));
   contactService.create(sampleContact({
-    name: '导出乙',
+    name: 'Export B',
     methods: [{ type: 'phone', value: '13900001234' }],
   }));
   const contacts = contactService.listForExport({ sort: 'name' });
@@ -95,14 +95,14 @@ test('the export puts one contact per row and one value per column', () => withC
 
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.load(buffer);
-  const worksheet = workbook.getWorksheet('通讯录');
+  const worksheet = workbook.getWorksheet('Contacts');
   assert.ok(worksheet);
 
   const header = worksheet.getRow(3).values.slice(1);
-  assert.equal(header[1], '姓名');
-  assert.equal(header[2], '分组');
-  assert.ok(header.includes('电话1'));
-  assert.ok(header.includes('邮箱1'));
+  assert.equal(header[1], 'Name');
+  assert.equal(header[2], 'Group');
+  assert.ok(header.includes('Phone 1'));
+  assert.ok(header.includes('Email 1'));
 
   // The rows follow the name order of the query, so the assertion finds the row
   // of each contact instead of relying on a collation rule.
@@ -112,30 +112,30 @@ test('the export puts one contact per row and one value per column', () => withC
     rowsByName.set(row[1], { rowNumber, cells: row });
   }
   assert.equal(rowsByName.size, 2);
-  assert.equal(rowsByName.get('导出甲').cells[6], '是');
-  assert.equal(rowsByName.get('导出乙').cells[6], '否');
+  assert.equal(rowsByName.get('Export A').cells[6], 'Yes');
+  assert.equal(rowsByName.get('Export B').cells[6], 'No');
   // The bookmark row is highlighted, which is what makes it findable in Excel.
   assert.equal(
-    worksheet.getRow(rowsByName.get('导出甲').rowNumber).getCell(2).fill.fgColor.argb,
+    worksheet.getRow(rowsByName.get('Export A').rowNumber).getCell(2).fill.fgColor.argb,
     'FFFEF3C7',
   );
 }));
 
 test('an exported workbook can be imported again without losing a value', () => withContext(async ({ contactService }) => {
   const original = contactService.create(sampleContact({
-    name: '往返测试',
+    name: 'Round Trip',
     methods: [
-      { type: 'phone', value: '13800008888', label: '手机' },
-      { type: 'phone', value: '0591 8888 9999', label: '办公' },
-      { type: 'email', value: 'roundtrip@example.com', label: '工作' },
-      { type: 'address', value: '福州市闽侯县学园路 2 号', label: '住址' },
+      { type: 'phone', value: '13800008888', label: 'Mobile' },
+      { type: 'phone', value: '0591 8888 9999', label: 'Office' },
+      { type: 'email', value: 'roundtrip@example.com', label: 'Work' },
+      { type: 'address', value: 'No. 2 Xueyuan Road, Minhou County, Fuzhou', label: 'Home' },
     ],
   }));
   const { buffer } = await createExportBuffer(contactService.listForExport({}));
 
   const plan = await parseImportWorkbook(buffer);
   assert.equal(plan.rows.length, 1);
-  assert.equal(plan.rows[0].name, '往返测试');
+  assert.equal(plan.rows[0].name, 'Round Trip');
   assert.equal(plan.rows[0].methods.length, 4);
   assert.equal(plan.rows[0].methods[0].value, '13800008888');
   assert.equal(plan.rows[0].methods[2].type, 'email');
@@ -146,10 +146,10 @@ test('an exported workbook can be imported again without losing a value', () => 
 
 test('importing a workbook creates the contacts and their methods', () => withContext(async (context) => {
   const buffer = await buildWorkbook(
-    ['姓名', '分组', '公司', '电话1', '电话2', '邮箱1', '微信', '是否收藏'],
+    ['Name', 'Group', 'Company', 'Phone 1', 'Phone 2', 'Email 1', 'WeChat', 'Bookmarked'],
     [
-      ['苏晚晴', '朋友', '未晚工作室', '13712345678', '0591 8888 1111', 'wanqing@example.com', 'suwanqing', '是'],
-      ['王浩然', '同事', '云图软件', '18600001111', '', 'haoran@company.com', 'wanghr', '否'],
+      ['Sophie Su', 'Friends', 'Muyan Studio', '13712345678', '0591 8888 1111', 'sophie.su@example.com', 'sophie_su', 'Yes'],
+      ['Henry Wang', 'Colleagues', 'Yuntu Software', '18600001111', '', 'henry.wang@yuntu.example.com', 'henry_wang_work', 'No'],
     ],
   );
   const report = await importBuffer(context, buffer);
@@ -158,8 +158,8 @@ test('importing a workbook creates the contacts and their methods', () => withCo
   assert.equal(report.totalRows, 2);
 
   const page = context.contactService.list({ sort: 'name' });
-  const su = page.items.find((contact) => contact.name === '苏晚晴');
-  assert.equal(su.groupName, '朋友');
+  const su = page.items.find((contact) => contact.name === 'Sophie Su');
+  assert.equal(su.groupName, 'Friends');
   assert.equal(su.methods.length, 4);
   assert.equal(su.isBookmarked, true);
   assert.equal(su.methods.filter((method) => method.type === 'phone').length, 2);
@@ -167,8 +167,8 @@ test('importing a workbook creates the contacts and their methods', () => withCo
 
 test('the skip mode leaves a duplicate contact untouched', () => withContext(async (context) => {
   const buffer = await buildWorkbook(
-    ['姓名', '电话1', '邮箱1'],
-    [['苏晚晴', '13712345678', 'wanqing@example.com']],
+    ['Name', 'Phone 1', 'Email 1'],
+    [['Sophie Su', '13712345678', 'sophie.su@example.com']],
   );
   const first = await importBuffer(context, buffer, 'skip');
   assert.equal(first.created, 1);
@@ -183,57 +183,57 @@ test('the skip mode leaves a duplicate contact untouched', () => withContext(asy
 
 test('the update mode merges new methods into the existing contact', () => withContext(async (context) => {
   const original = context.contactService.create(sampleContact({
-    name: '苏晚晴',
-    note: '旧备注',
+    name: 'Sophie Su',
+    note: 'Old note',
     methods: [{ type: 'phone', value: '13712345678' }],
   }));
 
   const buffer = await buildWorkbook(
-    ['姓名', '备注', '电话1', '邮箱1'],
-    [['苏晚晴', '', '13712345678', 'new@example.com']],
+    ['Name', 'Note', 'Phone 1', 'Email 1'],
+    [['Sophie Su', '', '13712345678', 'new@example.com']],
   );
   const report = await importBuffer(context, buffer, 'update');
   assert.equal(report.updated, 1);
 
   const stored = context.contactService.getById(original.id);
-  assert.equal(stored.note, '旧备注');
+  assert.equal(stored.note, 'Old note');
   assert.equal(stored.methods.length, 2);
   assert.ok(stored.methods.some((method) => method.type === 'email' && method.value === 'new@example.com'));
 }));
 
 test('a malformed value is reported with its Excel row number', () => withContext(async (context) => {
   const buffer = await buildWorkbook(
-    ['姓名', '电话1', '邮箱1'],
+    ['Name', 'Phone 1', 'Email 1'],
     [
-      ['正常联系人', '13800001111', 'ok@example.com'],
-      ['坏号码', 'not-a-phone', 'ok@example.com'],
-      ['坏邮箱', '13800002222', 'not-an-email'],
+      ['Valid Contact', '13800001111', 'ok@example.com'],
+      ['Bad Phone', 'not-a-phone', 'ok@example.com'],
+      ['Bad Email', '13800002222', 'not-an-email'],
     ],
   );
   const report = await importBuffer(context, buffer);
   assert.equal(report.created, 1);
   assert.equal(report.failed, 2);
   assert.deepEqual(report.rows.map((row) => row.row), [2, 3, 4]);
-  assert.match(report.rows[1].message, /不是有效的电话格式/);
-  assert.match(report.rows[2].message, /不是有效的邮箱格式/);
+  assert.match(report.rows[1].message, /is not a valid phone value/);
+  assert.match(report.rows[2].message, /is not a valid email value/);
   assert.equal(context.contactService.list({}).total, 1);
 }));
 
 test('English headers and reordered columns are accepted', () => withContext(async (context) => {
   const buffer = await buildWorkbook(
     ['Phone 1', 'Name', 'Email', 'Group'],
-    [['13800009999', 'English Header', 'en@example.com', '客户']],
+    [['13800009999', 'English Header', 'en@example.com', 'Clients']],
   );
   const report = await importBuffer(context, buffer);
   assert.equal(report.created, 1);
   const contact = context.contactService.list({}).items[0];
   assert.equal(contact.name, 'English Header');
-  assert.equal(contact.groupName, '客户');
+  assert.equal(contact.groupName, 'Clients');
   assert.deepEqual(contact.methods.map((method) => method.type), ['phone', 'email']);
 }));
 
 test('a workbook without a name column is rejected', () => withContext(async (context) => {
-  const buffer = await buildWorkbook(['电话1', '邮箱1'], [['13800001111', 'a@example.com']]);
+  const buffer = await buildWorkbook(['Phone 1', 'Email 1'], [['13800001111', 'a@example.com']]);
   const error = await expectRejection(() => importBuffer(context, buffer));
   assert.equal(error.code, 'IMPORT_HEADER_MISSING');
   assert.equal(error.status, 422);
@@ -252,12 +252,12 @@ test('the template contains the instruction sheet and no data row', () => withCo
 
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.load(buffer);
-  assert.ok(workbook.getWorksheet('通讯录'));
-  assert.ok(workbook.getWorksheet('填写说明'));
-  assert.equal(workbook.getWorksheet('通讯录').getRow(3).getCell(2).value, '姓名');
-  const templateHeader = workbook.getWorksheet('通讯录').getRow(3).values.slice(1);
-  assert.ok(templateHeader.includes('电话3'));
-  assert.ok(templateHeader.includes('邮箱3'));
+  assert.ok(workbook.getWorksheet('Contacts'));
+  assert.ok(workbook.getWorksheet('Instructions'));
+  assert.equal(workbook.getWorksheet('Contacts').getRow(3).getCell(2).value, 'Name');
+  const templateHeader = workbook.getWorksheet('Contacts').getRow(3).values.slice(1);
+  assert.ok(templateHeader.includes('Phone 3'));
+  assert.ok(templateHeader.includes('Email 3'));
 
   const plan = await parseImportWorkbook(buffer);
   assert.equal(plan.rows.length, 0);
@@ -265,34 +265,34 @@ test('the template contains the instruction sheet and no data row', () => withCo
   assert.equal(plan.totalRows, 0);
 }));
 
-test('the bookmark column accepts 是 and 否', () => withContext(async (context) => {
+test('the bookmark column accepts Yes and No', () => withContext(async (context) => {
   const buffer = await buildWorkbook(
-    ['姓名', '是否收藏', '电话1'],
+    ['Name', 'Bookmarked', 'Phone 1'],
     [
-      ['收藏的人', '是', '13800003333'],
-      ['未收藏的人', '否', '13800004444'],
-      ['留空的人', '', '13800005555'],
+      ['Bookmarked One', 'Yes', '13800003333'],
+      ['Unbookmarked One', 'No', '13800004444'],
+      ['Blank One', '', '13800005555'],
     ],
   );
   const report = await importBuffer(context, buffer);
   assert.equal(report.created, 3);
   const byName = new Map(context.contactService.list({}).items.map((item) => [item.name, item]));
-  assert.equal(byName.get('收藏的人').isBookmarked, true);
-  assert.equal(byName.get('未收藏的人').isBookmarked, false);
-  assert.equal(byName.get('留空的人').isBookmarked, false);
+  assert.equal(byName.get('Bookmarked One').isBookmarked, true);
+  assert.equal(byName.get('Unbookmarked One').isBookmarked, false);
+  assert.equal(byName.get('Blank One').isBookmarked, false);
 }));
 
 test('an unreadable bookmark value rejects the row', () => withContext(async (context) => {
-  const buffer = await buildWorkbook(['姓名', '是否收藏', '电话1'], [['奇怪标记', '也许', '13800006666']]);
+  const buffer = await buildWorkbook(['Name', 'Bookmarked', 'Phone 1'], [['Odd Flag', 'maybe', '13800006666']]);
   const report = await importBuffer(context, buffer);
   assert.equal(report.created, 0);
   assert.equal(report.failed, 1);
-  assert.match(report.rows[0].message, /是否收藏/);
+  assert.match(report.rows[0].message, /Bookmarked/);
 }));
 
 test('the row limit stops an oversized workbook', () => withContext(async (context) => {
-  const header = ['姓名', '电话1'];
-  const rows = Array.from({ length: 5 }, (_, index) => [`批量${index}`, `1380000700${index}`]);
+  const header = ['Name', 'Phone 1'];
+  const rows = Array.from({ length: 5 }, (_, index) => [`Batch ${index}`, `1380000700${index}`]);
   const buffer = await buildWorkbook(header, rows);
   const error = await expectRejection(() => parseImportWorkbook(buffer, { maxRows: 2 }));
   assert.equal(error.code, 'IMPORT_TOO_MANY_ROWS');
@@ -300,16 +300,16 @@ test('the row limit stops an oversized workbook', () => withContext(async (conte
 }));
 
 test('an unknown group name from a workbook is created', () => withContext(async (context) => {
-  const buffer = await buildWorkbook(['姓名', '分组', '电话1'], [['分组测试', '羽毛球群', '13800008888']]);
+  const buffer = await buildWorkbook(['Name', 'Group', 'Phone 1'], [['Group Test', 'Badminton Club', '13800008888']]);
   const report = await importBuffer(context, buffer);
   assert.equal(report.groupsCreated, 1);
   const groups = context.contactService.meta().groups.map((group) => group.name);
-  assert.ok(groups.includes('羽毛球群'));
+  assert.ok(groups.includes('Badminton Club'));
 }));
 
 test('an empty workbook is rejected', () => withContext(async (context) => {
   const workbook = new ExcelJS.Workbook();
-  workbook.addWorksheet('通讯录');
+  workbook.addWorksheet('Contacts');
   const buffer = Buffer.from(await workbook.xlsx.writeBuffer());
   const error = await expectRejection(() => importBuffer(context, buffer));
   assert.equal(error.code, 'IMPORT_WORKBOOK_EMPTY');

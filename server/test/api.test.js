@@ -49,7 +49,7 @@ test('the metadata describes method types, groups and sort options', async () =>
   const response = await request(server.baseUrl, '/api/meta');
   assert.equal(response.status, 200);
   assert.equal(response.body.methodTypes.length, 7);
-  assert.ok(response.body.groups.some((group) => group.name === '朋友'));
+  assert.ok(response.body.groups.some((group) => group.name === 'Friends'));
   assert.ok(response.body.sortOptions.length >= 4);
   assert.equal(response.body.stats.total, 0);
 });
@@ -58,11 +58,11 @@ test('a contact with several methods is created with 201', async () => {
   const response = await request(server.baseUrl, '/api/contacts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(sampleContact({ name: '接口测试甲' })),
+    body: JSON.stringify(sampleContact({ name: 'API Contact A' })),
   });
   assert.equal(response.status, 201);
   assert.equal(response.body.success, true);
-  assert.equal(response.body.contact.name, '接口测试甲');
+  assert.equal(response.body.contact.name, 'API Contact A');
   assert.equal(response.body.contact.methods.length, 4);
   assert.equal(response.body.contact.methods.filter((method) => method.isPrimary).length, 1);
   context.createdId = response.body.contact.id;
@@ -80,7 +80,7 @@ test('the listing returns the contact and the statistics', async () => {
 test('one contact can be read by its id', async () => {
   const response = await request(server.baseUrl, `/api/contacts/${context.createdId}`);
   assert.equal(response.status, 200);
-  assert.equal(response.body.contact.name, '接口测试甲');
+  assert.equal(response.body.contact.name, 'API Contact A');
 });
 
 test('a contact can be updated through HTTP', async () => {
@@ -88,7 +88,7 @@ test('a contact can be updated through HTTP', async () => {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(sampleContact({
-      name: '接口测试甲（改）',
+      name: 'API Contact A (updated)',
       methods: [
         { type: 'email', value: 'changed@example.com' },
         { type: 'wechat', value: 'changed_wechat' },
@@ -96,7 +96,7 @@ test('a contact can be updated through HTTP', async () => {
     })),
   });
   assert.equal(response.status, 200);
-  assert.equal(response.body.contact.name, '接口测试甲（改）');
+  assert.equal(response.body.contact.name, 'API Contact A (updated)');
   assert.equal(response.body.contact.methods.length, 2);
 });
 
@@ -195,8 +195,8 @@ test('the export returns an xlsx attachment with one row per contact', async () 
 
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.load(buffer);
-  const worksheet = workbook.getWorksheet('通讯录');
-  assert.equal(worksheet.getRow(4).getCell(2).value, '接口测试甲（改）');
+  const worksheet = workbook.getWorksheet('Contacts');
+  assert.equal(worksheet.getRow(4).getCell(2).value, 'API Contact A (updated)');
 });
 
 test('the import template is downloadable', async () => {
@@ -209,10 +209,10 @@ test('the import template is downloadable', async () => {
 
 test('a workbook is imported over multipart and reported row by row', async () => {
   const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('通讯录');
-  worksheet.addRow(['姓名', '分组', '电话1', '电话2', '邮箱1', '微信', '是否收藏']);
-  worksheet.addRow(['导入甲', '同事', '13900001111', '0591 8000 1111', 'jia@example.com', 'jia_wx', '是']);
-  worksheet.addRow(['导入乙', '朋友', '13900002222', '', 'yi@example.com', '', '否']);
+  const worksheet = workbook.addWorksheet('Contacts');
+  worksheet.addRow(['Name', 'Group', 'Phone 1', 'Phone 2', 'Email 1', 'WeChat', 'Bookmarked']);
+  worksheet.addRow(['Import A', 'Colleagues', '13900001111', '0591 8000 1111', 'jia@example.com', 'jia_wx', 'Yes']);
+  worksheet.addRow(['Import B', 'Friends', '13900002222', '', 'yi@example.com', '', 'No']);
   const buffer = Buffer.from(await workbook.xlsx.writeBuffer());
 
   const response = await importWorkbook(server.baseUrl, buffer, 'skip');
@@ -270,11 +270,11 @@ test('the keyword and bookmark filters travel through the query string', async (
   const bookmarked = await request(server.baseUrl, '/api/contacts?bookmarked=true&pageSize=100');
   assert.equal(bookmarked.status, 200);
   assert.ok(bookmarked.body.items.every((contact) => contact.isBookmarked === true));
-  assert.ok(bookmarked.body.items.some((contact) => contact.name === '导入甲'));
+  assert.ok(bookmarked.body.items.some((contact) => contact.name === 'Import A'));
 
-  const keyword = await request(server.baseUrl, '/api/contacts?keyword=导入乙');
+  const keyword = await request(server.baseUrl, '/api/contacts?keyword=Import B');
   assert.equal(keyword.body.total, 1);
-  assert.equal(keyword.body.items[0].name, '导入乙');
+  assert.equal(keyword.body.items[0].name, 'Import B');
 });
 
 test('an invalid query parameter answers 400', async () => {

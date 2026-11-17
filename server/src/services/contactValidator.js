@@ -13,8 +13,8 @@ const { METHOD_TYPES, findMethodType } = require('../utils/methodTypes');
  */
 
 /** Values accepted as `true` / `false` in a boolean field. */
-const TRUE_VALUES = Object.freeze(['true', '1', 'yes', 'y', '是', '收藏']);
-const FALSE_VALUES = Object.freeze(['false', '0', 'no', 'n', '否']);
+const TRUE_VALUES = Object.freeze(['true', '1', 'yes', 'y', 'on']);
+const FALSE_VALUES = Object.freeze(['false', '0', 'no', 'n', 'off']);
 
 /** Deterministic avatar palette; the colour of a contact never changes. */
 const AVATAR_PALETTE = Object.freeze([

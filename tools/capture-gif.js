@@ -76,19 +76,19 @@ async function main() {
   // 1-4: the main views of the address book.
   await demo('showAll()');
   await waitFor('window.__contactbook.total === 20');
-  await frame('全部联系人：卡片里显示主要联系方式');
+  await frame('All contacts: cards show the primary methods');
 
   await demo('showBookmarks()');
   await waitFor('window.__contactbook.total === 7');
-  await frame('我的收藏：星标联系人集中显示');
+  await frame('Favorites: bookmarked contacts in one place');
 
   await demo('showGroup(3)');
   await waitFor('window.__contactbook.total === 6');
-  await frame('按分组筛选：同事');
+  await frame('Filter by group: Colleagues');
 
-  await demo("search('云图')");
+  await demo("search('Yuntu')");
   await waitFor('window.__contactbook.total === 6');
-  await frame('搜索“云图”：姓名、公司、备注、联系方式统一匹配');
+  await frame('Search “Yuntu”: names, companies, notes and methods all match');
 
   // 5-6: detail drawer and the bookmark action.
   await demo("search('')");
@@ -96,7 +96,7 @@ async function main() {
   await waitFor('window.__contactbook.total === 20');
   await demo('openDetail(13)');
   await waitFor('window.__contactbook.detail && window.__contactbook.detail.id === 13');
-  await frame('详情抽屉：一位联系人的四条联系方式');
+  await frame('Detail drawer: four contact methods of one person');
 
   await demo('closeDetail()');
   const target = await evaluate(`(function () {
@@ -108,52 +108,52 @@ async function main() {
   })()`);
   await evaluate(`window.__demo.click('[data-contact-id="${target}"] [data-testid="bookmark-button"]')`);
   await waitFor('window.__contactbook.stats.bookmarked === 8');
-  await frame('点击星标：收藏立即生效并给出提示');
+  await frame('Click the star: the bookmark is stored and confirmed');
 
   // 7-10: creating a contact with three contact methods.
   await demo('openCreateForm()');
   await waitFor('window.__contactbook.form.open === true');
-  await frame('新建联系人：表单从一条电话开始');
+  await frame('New contact: the form starts with one phone row');
 
-  await demo("type('[data-testid=\"form-name\"]', '林澄月')");
-  await demo("type('[data-testid=\"form-company\"]', '厦门大学')");
-  await demo("type('[data-testid=\"form-title\"]', '软件工程')");
+  await demo("type('[data-testid=\"form-name\"]', 'Chloe Lau')");
+  await demo("type('[data-testid=\"form-company\"]', 'Xiamen University')");
+  await demo("type('[data-testid=\"form-title\"]', 'Software engineering')");
   await demo("select('[data-testid=\"form-group\"]', '2')");
-  await frame('填写姓名、公司与分组');
+  await frame('Fill in name, company and group');
 
-  await demo("type('[data-testid=\"method-label-0\"]', '手机')");
+  await demo("type('[data-testid=\"method-label-0\"]', 'Mobile')");
   await demo("type('[data-testid=\"method-value-0\"]', '138 0000 8888')");
   await demo("click('[data-testid=\"add-method-email\"]')");
-  await demo("type('[data-testid=\"method-label-1\"]', '常用')");
-  await demo("type('[data-testid=\"method-value-1\"]', 'chengyue.lin@example.com')");
+  await demo("type('[data-testid=\"method-label-1\"]', 'Work')");
+  await demo("type('[data-testid=\"method-value-1\"]', 'chloe.lau@example.com')");
   await demo("click('[data-testid=\"add-method-wechat\"]')");
-  await demo("type('[data-testid=\"method-value-2\"]', 'chengyue_lin')");
+  await demo("type('[data-testid=\"method-value-2\"]', 'chloe_lau')");
   await demo("click('[data-testid=\"form-bookmark\"]')");
-  await frame('一位联系人可以有多条联系方式，并可设为主要');
+  await frame('One contact can hold several methods and a primary one');
 
-  await demo("type('[data-testid=\"method-value-2\"]', 'chengyue.lin')");
+  await demo("type('[data-testid=\"method-value-2\"]', 'chloe_lau')");
   await demo("click('[data-testid=\"form-submit\"]')");
   await waitFor('window.__contactbook.form.open === false && window.__contactbook.total === 21');
-  await frame('保存成功：新联系人出现在列表顶部');
+  await frame('Saved: the new contact appears at the top');
 
   // 11-12: the import workflow.
   await demo('openImportDialog()');
   await waitFor('window.__contactbook.importDialog.open === true');
-  await frame('导入：选择 .xlsx 工作簿（可拖入）');
+  await frame('Import: choose an .xlsx workbook (or drop it)');
   await browser.setFileInput('[data-testid="import-file-input"]', sampleWorkbook);
   await waitFor('!!document.querySelector(\'[data-testid="import-file-card"]\')');
-  await frame('导入：选择“跳过重复”或“更新已有”');
+  await frame('Import: skip duplicates or update existing contacts');
   await demo("click('[data-testid=\"import-submit\"]')");
   await waitFor('!!document.querySelector(\'[data-testid="import-report"]\')', 20000);
-  await frame('导入报告：新增、更新、跳过与失败逐行说明');
+  await frame('Import report: created, updated, skipped and failed rows');
 
   await demo("click('[data-testid=\"import-finish\"]')");
   await waitFor('window.__contactbook.importDialog.open === false && window.__contactbook.total === 24');
-  await frame('导入完成：列表与分组计数同步刷新');
+  await frame('Import finished: list and group counts refresh');
 
   await demo('showBookmarks()');
   await waitFor('window.__contactbook.total === 11');
-  await frame('收藏视图：整份通讯录里最重要的联系人');
+  await frame('Favorites: the contacts that matter most');
 
   fs.writeFileSync(
     path.join(outputDirectory, 'frames.json'),

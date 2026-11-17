@@ -19,13 +19,13 @@ import AppIcon from './AppIcon.vue';
           </span>
           <div>
             <h2 class="dialog__title">{{ book.confirm.title }}</h2>
-            <p class="dialog__subtitle">请确认这一步操作</p>
+            <p class="dialog__subtitle">Please confirm this action</p>
           </div>
         </header>
         <div class="confirm-dialog__body">{{ book.confirm.message }}</div>
         <footer class="dialog__foot">
           <button type="button" class="btn btn--ghost" :disabled="book.confirm.busy" @click="cancelConfirm">
-            取消
+            Cancel
           </button>
           <button
             type="button"
@@ -36,7 +36,7 @@ import AppIcon from './AppIcon.vue';
             @click="confirmAction"
           >
             <AppIcon name="trash" />
-            {{ book.confirm.busy ? '处理中…' : book.confirm.confirmLabel }}
+            {{ book.confirm.busy ? 'Working…' : book.confirm.confirmLabel }}
           </button>
         </footer>
       </div>

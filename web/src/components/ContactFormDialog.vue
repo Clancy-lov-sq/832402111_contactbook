@@ -48,18 +48,18 @@ const draft = reactive({
 const errors = reactive({});
 
 const isEditing = computed(() => Boolean(book.form.contact));
-const title = computed(() => (isEditing.value ? '编辑联系人' : '新建联系人'));
+const title = computed(() => (isEditing.value ? 'Edit contact' : 'New contact'));
 const methodTypes = computed(() => (
   book.methodTypes.length > 0
     ? book.methodTypes
     : [
-      { type: 'phone', label: '电话' },
-      { type: 'email', label: '邮箱' },
-      { type: 'wechat', label: '微信' },
+      { type: 'phone', label: 'Phone' },
+      { type: 'email', label: 'Email' },
+      { type: 'wechat', label: 'WeChat' },
       { type: 'qq', label: 'QQ' },
-      { type: 'address', label: '地址' },
-      { type: 'website', label: '网址' },
-      { type: 'other', label: '其他' },
+      { type: 'address', label: 'Address' },
+      { type: 'website', label: 'Website' },
+      { type: 'other', label: 'Other' },
     ]
 ));
 
@@ -139,7 +139,7 @@ function setPrimary(index) {
 
 /** @param {string} type @returns {string} */
 function placeholderFor(type) {
-  return METHOD_PLACEHOLDER[type] || '联系方式';
+  return METHOD_PLACEHOLDER[type] || 'Contact method';
 }
 
 /** Clears one error as soon as the user edits the field. */
@@ -154,29 +154,29 @@ function validate() {
   }
 
   if (draft.name.trim() === '') {
-    errors.name = '请填写联系人姓名';
+    errors.name = 'Please enter a name';
   } else if (draft.name.trim().length > 40) {
-    errors.name = '姓名最多 40 个字符';
+    errors.name = 'A name may have at most 40 characters';
   }
 
   if (draft.groupChoice === '__new__' && draft.newGroupName.trim() === '') {
-    errors.group = '请填写新分组的名称';
+    errors.group = 'Please name the new group';
   }
 
   const seen = new Set();
   draft.methods.forEach((method, index) => {
     const value = method.value.trim();
     if (value === '') {
-      errors[`methods[${index}].value`] = '请填写联系方式';
+      errors[`methods[${index}].value`] = 'Please enter a value';
       return;
     }
     if (!isValidMethodValue(method.type, value)) {
-      errors[`methods[${index}].value`] = METHOD_HINT[method.type] || '格式不正确';
+      errors[`methods[${index}].value`] = METHOD_HINT[method.type] || 'Invalid format';
       return;
     }
     const key = `${method.type}:${value.toLowerCase()}`;
     if (seen.has(key)) {
-      errors[`methods[${index}].value`] = '同一种联系方式不能重复';
+      errors[`methods[${index}].value`] = 'This method is already listed';
       return;
     }
     seen.add(key);
@@ -234,13 +234,13 @@ function cancel() {
           <div>
             <h2 class="dialog__title">{{ title }}</h2>
             <p class="dialog__subtitle">
-              {{ isEditing ? '修改后立即同步到数据库' : '把电话、邮箱、微信等联系方式都放在同一位联系人下面' }}
+              {{ isEditing ? 'Changes are saved to the database immediately' : 'Keep every phone number, e-mail and handle of one person together' }}
             </p>
           </div>
           <button
             type="button"
             class="dialog__close"
-            aria-label="关闭"
+            aria-label="Close"
             data-testid="form-close"
             @click="cancel"
           >
@@ -252,7 +252,7 @@ function cancel() {
           <div class="form-grid">
             <div class="field">
               <label class="field__label" for="contact-name">
-                姓名<span class="required">*</span>
+                Name<span class="required">*</span>
               </label>
               <input
                 id="contact-name"
@@ -261,7 +261,7 @@ function cancel() {
                 :class="{ 'is-invalid': errors.name }"
                 type="text"
                 maxlength="40"
-                placeholder="例如：苏晚晴"
+                placeholder="e.g. Sophie Su"
                 data-testid="form-name"
                 @input="clearError('name')"
               />
@@ -269,7 +269,7 @@ function cancel() {
             </div>
 
             <div class="field">
-              <label class="field__label" for="contact-group">分组</label>
+              <label class="field__label" for="contact-group">Group</label>
               <select
                 id="contact-group"
                 v-model="draft.groupChoice"
@@ -278,11 +278,11 @@ function cancel() {
                 data-testid="form-group"
                 @change="clearError('group')"
               >
-                <option value="">未分组</option>
+                <option value="">No group</option>
                 <option v-for="group in book.stats.groups" :key="group.id" :value="String(group.id)">
                   {{ group.name }}
                 </option>
-                <option value="__new__">+ 新建分组…</option>
+                <option value="__new__">+ New group…</option>
               </select>
               <input
                 v-if="draft.groupChoice === '__new__'"
@@ -290,7 +290,7 @@ function cancel() {
                 class="input"
                 type="text"
                 maxlength="20"
-                placeholder="新分组的名称，例如：读书会"
+                placeholder="New group name, e.g. Book club"
                 data-testid="form-new-group"
                 @input="clearError('group')"
               />
@@ -298,39 +298,39 @@ function cancel() {
             </div>
 
             <div class="field">
-              <label class="field__label" for="contact-company">公司</label>
+              <label class="field__label" for="contact-company">Company</label>
               <input
                 id="contact-company"
                 v-model="draft.company"
                 class="input"
                 type="text"
                 maxlength="60"
-                placeholder="例如：云图软件"
+                placeholder="e.g. Yuntu Software"
                 data-testid="form-company"
               />
             </div>
 
             <div class="field">
-              <label class="field__label" for="contact-title">职位</label>
+              <label class="field__label" for="contact-title">Title</label>
               <input
                 id="contact-title"
                 v-model="draft.title"
                 class="input"
                 type="text"
                 maxlength="40"
-                placeholder="例如：后端工程师"
+                placeholder="e.g. Backend engineer"
                 data-testid="form-title"
               />
             </div>
 
             <div class="field field--full">
-              <label class="field__label" for="contact-note">备注</label>
+              <label class="field__label" for="contact-note">Notes</label>
               <textarea
                 id="contact-note"
                 v-model="draft.note"
                 class="textarea"
                 maxlength="500"
-                placeholder="例如：周三下午方便联系，邮件优先"
+                placeholder="e.g. Prefers e-mail on weekday afternoons"
                 data-testid="form-note"
               />
             </div>
@@ -338,8 +338,8 @@ function cancel() {
 
           <div class="switch-row">
             <div>
-              <p class="field__label">加入收藏</p>
-              <p class="field__hint">收藏的联系人会出现在“我的收藏”里，也可以按收藏时间排序。</p>
+              <p class="field__label">Add to favorites</p>
+              <p class="field__hint">Bookmarked contacts appear in Favorites and can be sorted by bookmark time.</p>
             </div>
             <button
               type="button"
@@ -354,14 +354,14 @@ function cancel() {
 
           <div class="field">
             <div class="section-label" style="margin-bottom: 2px">
-              <span>联系方式 · {{ draft.methods.length }} 条</span>
+              <span>Contact methods · {{ draft.methods.length }}</span>
             </div>
             <div class="method-editor">
               <div v-for="(method, index) in draft.methods" :key="method.key" class="method-edit">
                 <select
                   v-model="method.type"
                   class="select-input"
-                  :aria-label="`第 ${index + 1} 条联系方式的类型`"
+                  :aria-label="`Type of contact method ${index + 1}`"
                   :data-testid="`method-type-${index}`"
                 >
                   <option v-for="type in methodTypes" :key="type.type" :value="type.type">
@@ -373,7 +373,7 @@ function cancel() {
                   class="input"
                   type="text"
                   maxlength="20"
-                  placeholder="标签（可选）"
+                  placeholder="Label (optional)"
                   :data-testid="`method-label-${index}`"
                 />
                 <input
@@ -386,19 +386,19 @@ function cancel() {
                   :data-testid="`method-value-${index}`"
                   @input="clearError(`methods[${index}].value`)"
                 />
-                <label class="method-edit__primary" title="设为主要联系方式">
+                <label class="method-edit__primary" title="Set as the primary contact method">
                   <input
                     type="radio"
                     :name="'primary-method'"
                     :checked="method.isPrimary"
                     @change="setPrimary(index)"
                   />
-                  主
+                  Primary
                 </label>
                 <button
                   type="button"
                   class="method-edit__remove"
-                  :aria-label="`删除第 ${index + 1} 条联系方式`"
+                  :aria-label="`Remove contact method ${index + 1}`"
                   :data-testid="`method-remove-${index}`"
                   @click="removeMethod(index)"
                 >
@@ -419,11 +419,12 @@ function cancel() {
                   @click="addMethod(type.type)"
                 >
                   <AppIcon :name="methodStyle(type.type).icon" />
-                  添加{{ type.label }}
+                  Add {{ type.label }}
                 </button>
               </div>
               <p class="field__hint">
-                一条联系方式的类型决定它的格式要求；只有一条时可以忽略“主”，系统会自动把第一条设为主要联系方式。
+                The type of a contact method sets its format rules; with a single method you can ignore
+                “Primary”, because the first one becomes primary automatically.
               </p>
             </div>
           </div>
@@ -431,7 +432,7 @@ function cancel() {
 
         <footer class="dialog__foot">
           <button type="button" class="btn btn--ghost" :disabled="book.form.saving" @click="cancel">
-            取消
+            Cancel
           </button>
           <button
             type="button"
@@ -441,7 +442,7 @@ function cancel() {
             @click="submit"
           >
             <AppIcon name="check" />
-            {{ book.form.saving ? '保存中…' : (isEditing ? '保存修改' : '创建联系人') }}
+            {{ book.form.saving ? 'Saving…' : (isEditing ? 'Save changes' : 'Create contact') }}
           </button>
         </footer>
       </div>

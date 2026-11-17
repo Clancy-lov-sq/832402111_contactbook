@@ -16,30 +16,31 @@ const emit = defineEmits(['create', 'clear']);
       <AppIcon :name="filtered ? 'search' : 'users'" />
     </span>
     <template v-if="filtered">
-      <h2 class="empty__title">没有匹配的联系人</h2>
+      <h2 class="empty__title">No matching contacts</h2>
       <p class="empty__text">
-        当前筛选条件没有结果<span v-if="keyword">（关键词“{{ keyword }}”）</span>。
-        试试换一个关键词，或者清除筛选看看全部联系人。
+        No contact matches the current filters<span v-if="keyword"> (keyword “{{ keyword }}”)</span>.
+        Try another keyword or clear the filters.
       </p>
       <div class="empty__actions">
         <button type="button" class="btn btn--ghost" data-testid="empty-clear" @click="emit('clear')">
-          清除筛选
+          Clear filters
         </button>
         <button type="button" class="btn btn--primary" @click="emit('create')">
           <AppIcon name="plus" />
-          新建联系人
+          New contact
         </button>
       </div>
     </template>
     <template v-else>
-      <h2 class="empty__title">通讯录还是空的</h2>
+      <h2 class="empty__title">Your address book is empty</h2>
       <p class="empty__text">
-        添加第一位联系人，或者导入一份已经整理好的 Excel 表格。收藏的联系人会排在“我的收藏”里，随时可以快速找到。
+        Add the first contact, or import a prepared Excel workbook. Bookmarked contacts
+        stay in Favorites for quick access.
       </p>
       <div class="empty__actions">
         <button type="button" class="btn btn--primary" data-testid="empty-create" @click="emit('create')">
           <AppIcon name="plus" />
-          新建联系人
+          New contact
         </button>
       </div>
     </template>

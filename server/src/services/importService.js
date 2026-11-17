@@ -82,7 +82,7 @@ class ImportService {
                 row: row.row,
                 name: row.name,
                 status: 'skipped',
-                message: `已存在同名同联系方式的联系人（#${duplicate.id}），已跳过`,
+                message: `A contact with the same name and method already exists (#${duplicate.id}); skipped`,
               });
               continue;
             }
@@ -116,7 +116,7 @@ class ImportService {
                 row: row.row,
                 name: row.name,
                 status: 'updated',
-                message: `已合并更新联系人 #${duplicate.id}，新增 ${mergedMethods.length - existing.methods.length} 条联系方式`,
+                message: `Updated contact #${duplicate.id}; merged ${mergedMethods.length - existing.methods.length} new contact method(s)`,
               });
               continue;
             }
@@ -135,7 +135,7 @@ class ImportService {
               row: row.row,
               name: row.name,
               status: 'created',
-              message: `已新增联系人 #${contact.id}（${contact.methods.length} 条联系方式）`,
+              message: `Created contact #${contact.id} with ${contact.methods.length} contact method(s)`,
             });
           } catch (error) {
             const message = error instanceof AppError

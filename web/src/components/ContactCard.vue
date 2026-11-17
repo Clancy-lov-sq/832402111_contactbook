@@ -56,7 +56,7 @@ function onDelete(event) {
     data-testid="contact-card"
     tabindex="0"
     role="button"
-    :aria-label="`查看 ${contact.name} 的联系方式`"
+    :aria-label="`View contact methods for ${contact.name}`"
     @click="emit('open', contact.id)"
     @keydown.enter="emit('open', contact.id)"
     @keydown.space.prevent="emit('open', contact.id)"
@@ -66,8 +66,8 @@ function onDelete(event) {
       class="card__star"
       :class="{ 'is-on': contact.isBookmarked }"
       :aria-pressed="contact.isBookmarked"
-      :aria-label="contact.isBookmarked ? `取消收藏 ${contact.name}` : `收藏 ${contact.name}`"
-      :title="contact.isBookmarked ? '取消收藏' : '加入收藏'"
+      :aria-label="contact.isBookmarked ? `Remove ${contact.name} from favorites` : `Add ${contact.name} to favorites`"
+      :title="contact.isBookmarked ? 'Remove from favorites' : 'Add to favorites'"
       data-testid="bookmark-button"
       @click="onBookmark"
     >
@@ -89,7 +89,7 @@ function onDelete(event) {
             {{ [contact.company, contact.title].filter(Boolean).join(' · ') }}
           </template>
           <span v-if="!contact.groupName && !contact.company && !contact.title" class="muted">
-            未填写公司与职位
+            No company or title
           </span>
         </p>
       </div>
@@ -112,15 +112,15 @@ function onDelete(event) {
         </span>
         <span v-if="method.label" class="method__label">{{ method.label }}</span>
         <span class="method__value">{{ method.value }}</span>
-        <span v-if="method.isPrimary" class="method__primary">主</span>
+        <span v-if="method.isPrimary" class="method__primary">Primary</span>
       </div>
       <p v-if="extraMethodCount > 0" class="card__method-count">
-        还有 {{ extraMethodCount }} 条联系方式，点击卡片查看
+        {{ extraMethodCount }} more method{{ extraMethodCount === 1 ? '' : 's' }} · open the card
       </p>
     </div>
 
     <div v-else class="card__methods">
-      <p class="card__method-count">尚未添加联系方式</p>
+      <p class="card__method-count">No contact methods yet</p>
     </div>
 
     <footer class="card__foot">
@@ -132,8 +132,8 @@ function onDelete(event) {
         <button
           type="button"
           class="icon-button"
-          title="编辑"
-          aria-label="编辑"
+          title="Edit"
+          aria-label="Edit"
           data-testid="card-edit"
           @click="onEdit"
         >
@@ -142,8 +142,8 @@ function onDelete(event) {
         <button
           type="button"
           class="icon-button icon-button--danger"
-          title="删除"
-          aria-label="删除"
+          title="Delete"
+          aria-label="Delete"
           data-testid="card-delete"
           @click="onDelete"
         >

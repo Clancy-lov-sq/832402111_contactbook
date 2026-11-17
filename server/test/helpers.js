@@ -135,16 +135,16 @@ async function importWorkbook(baseUrl, buffer, mode = 'skip') {
  */
 function sampleContact(overrides = {}) {
   return {
-    name: '测试联系人',
-    groupName: '朋友',
-    company: '示例公司',
-    title: '工程师',
-    note: '自动化测试创建的联系人',
+    name: 'Test Contact',
+    groupName: 'Friends',
+    company: 'Example Ltd',
+    title: 'Engineer',
+    note: 'Created by the automated tests',
     isBookmarked: false,
     methods: [
-      { type: 'phone', value: '13800001111', label: '手机', isPrimary: true },
-      { type: 'phone', value: '0591 8888 6666', label: '办公' },
-      { type: 'email', value: 'sample@example.com', label: '工作' },
+      { type: 'phone', value: '13800001111', label: 'Mobile', isPrimary: true },
+      { type: 'phone', value: '0591 8888 6666', label: 'Office' },
+      { type: 'email', value: 'sample@example.com', label: 'Work' },
       { type: 'wechat', value: 'sample_wechat', label: '' },
     ],
     ...overrides,

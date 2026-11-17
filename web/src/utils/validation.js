@@ -31,17 +31,17 @@ export const METHOD_PLACEHOLDER = Object.freeze({
   wechat: 'wechat_id',
   qq: '10001',
   website: 'https://example.com',
-  address: '福建省福州市……',
-  other: '自定义联系方式',
+  address: '221B Baker Street, London',
+  other: 'Custom contact method',
 });
 
 /** A hint shown under the form when a value is rejected. */
 export const METHOD_HINT = Object.freeze({
-  phone: '至少 6 位数字，可带空格、括号与 +86',
-  email: '需要包含 @ 和域名，例如 name@example.com',
-  wechat: '2–40 位字母、数字、下划线或短横线',
-  qq: '5–12 位数字',
-  website: '以 http(s):// 开头，或直接写域名',
-  address: '详细地址，最多 120 个字符',
-  other: '任意联系方式，最多 120 个字符',
+  phone: 'At least 6 digits; spaces, brackets and +86 are allowed',
+  email: 'Must contain @ and a domain, e.g. name@example.com',
+  wechat: '2–40 letters, digits, underscores or dashes',
+  qq: '5–12 digits',
+  website: 'Start with http(s):// or write a bare domain',
+  address: 'A detailed address, at most 120 characters',
+  other: 'Any contact method, at most 120 characters',
 });

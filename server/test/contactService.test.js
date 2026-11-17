@@ -32,8 +32,8 @@ function expectError(callback) {
 
 test('creating a contact stores its methods and reuses an existing group', () => withContext(({ contactService }) => {
   const contact = contactService.create(sampleContact());
-  assert.equal(contact.name, '测试联系人');
-  assert.equal(contact.groupName, '朋友');
+  assert.equal(contact.name, 'Test Contact');
+  assert.equal(contact.groupName, 'Friends');
   assert.equal(contact.methods.length, 4);
   assert.deepEqual(
     contact.methods.map((method) => method.type),
@@ -44,16 +44,16 @@ test('creating a contact stores its methods and reuses an existing group', () =>
 }));
 
 test('a group that does not exist yet is created by name', () => withContext(({ contactService }) => {
-  const contact = contactService.create(sampleContact({ groupName: '读书会' }));
-  assert.equal(contact.groupName, '读书会');
+  const contact = contactService.create(sampleContact({ groupName: 'Book Club' }));
+  assert.equal(contact.groupName, 'Book Club');
   const groups = contactService.meta().groups.map((group) => group.name);
-  assert.ok(groups.includes('读书会'));
+  assert.ok(groups.includes('Book Club'));
 }));
 
 test('the listing reports pagination, filters and statistics', () => withContext(({ contactService }) => {
   for (let index = 0; index < 5; index += 1) {
     contactService.create(sampleContact({
-      name: `联系人${index}`,
+      name: `Contact ${index}`,
       methods: [{ type: 'phone', value: `1380000100${index}` }],
       isBookmarked: index % 2 === 0,
     }));
@@ -76,13 +76,13 @@ test('a contact that does not exist raises CONTACT_NOT_FOUND', () => withContext
 test('an update replaces the method list and keeps the creation time', () => withContext(({ contactService }) => {
   const created = contactService.create(sampleContact());
   const updated = contactService.update(created.id, sampleContact({
-    name: '测试联系人（改）',
+    name: 'Test Contact (updated)',
     methods: [
-      { type: 'email', value: 'new@example.com', label: '新邮箱' },
-      { type: 'address', value: '福州市鼓楼区 1 号' },
+      { type: 'email', value: 'new@example.com', label: 'New email' },
+      { type: 'address', value: 'No. 1 Wusi Road, Fuzhou' },
     ],
   }));
-  assert.equal(updated.name, '测试联系人（改）');
+  assert.equal(updated.name, 'Test Contact (updated)');
   assert.equal(updated.methods.length, 2);
   assert.equal(updated.methods[0].type, 'email');
   assert.equal(updated.createdAt, created.createdAt);
@@ -124,66 +124,66 @@ test('deleting a missing contact raises CONTACT_NOT_FOUND', () => withContext(({
 }));
 
 test('the keyword searches the name, the note and every method value', () => withContext(({ contactService }) => {
-  contactService.create(sampleContact({ name: '苏晚晴', note: '大学室友' }));
+  contactService.create(sampleContact({ name: 'Sophie Su', note: 'College roommate' }));
   contactService.create(sampleContact({
-    name: '王浩然',
-    groupName: '同事',
-    note: '接口联调',
+    name: 'Henry Wang',
+    groupName: 'Colleagues',
+    note: 'API integration',
     methods: [{ type: 'email', value: 'haoran.wang@company.com' }],
   }));
 
-  assert.equal(contactService.list({ keyword: '苏晚晴' }).total, 1);
-  assert.equal(contactService.list({ keyword: '联调' }).total, 1);
+  assert.equal(contactService.list({ keyword: 'Sophie Su' }).total, 1);
+  assert.equal(contactService.list({ keyword: 'integration' }).total, 1);
   assert.equal(contactService.list({ keyword: 'company.com' }).total, 1);
-  assert.equal(contactService.list({ keyword: '不存在的关键字' }).total, 0);
+  assert.equal(contactService.list({ keyword: 'no such keyword' }).total, 0);
 }));
 
 test('the bookmark filter returns only starred contacts', () => withContext(({ contactService }) => {
-  contactService.create(sampleContact({ name: '甲', isBookmarked: true }));
-  contactService.create(sampleContact({ name: '乙', isBookmarked: false }));
+  contactService.create(sampleContact({ name: 'Alpha', isBookmarked: true }));
+  contactService.create(sampleContact({ name: 'Beta', isBookmarked: false }));
   const page = contactService.list({ bookmarked: 'true' });
   assert.equal(page.total, 1);
-  assert.equal(page.items[0].name, '甲');
+  assert.equal(page.items[0].name, 'Alpha');
 }));
 
 test('the ungrouped filter selects contacts without a group', () => withContext(({ contactService }) => {
-  contactService.create(sampleContact({ name: '有分组', groupName: '同事' }));
+  contactService.create(sampleContact({ name: 'Grouped', groupName: 'Colleagues' }));
   const ungrouped = contactService.create(sampleContact({
-    name: '无分组',
+    name: 'Ungrouped',
     groupName: '',
     methods: [{ type: 'phone', value: '13800002222' }],
   }));
   assert.equal(ungrouped.groupId, null);
   const page = contactService.list({ groupId: '0' });
   assert.equal(page.total, 1);
-  assert.equal(page.items[0].name, '无分组');
+  assert.equal(page.items[0].name, 'Ungrouped');
 }));
 
 test('contacts can be sorted by name', () => withContext(({ contactService }) => {
-  contactService.create(sampleContact({ name: '陈秀兰', methods: [{ type: 'phone', value: '13800003333' }] }));
-  contactService.create(sampleContact({ name: '安一', methods: [{ type: 'phone', value: '13800004444' }] }));
-  contactService.create(sampleContact({ name: '周子墨', methods: [{ type: 'phone', value: '13800005555' }] }));
+  contactService.create(sampleContact({ name: 'Susan Lin', methods: [{ type: 'phone', value: '13800003333' }] }));
+  contactService.create(sampleContact({ name: 'Aaron', methods: [{ type: 'phone', value: '13800004444' }] }));
+  contactService.create(sampleContact({ name: 'Marco Zhou', methods: [{ type: 'phone', value: '13800005555' }] }));
   const page = contactService.list({ sort: 'name' });
-  assert.deepEqual(page.items.map((contact) => contact.name), ['安一', '周子墨', '陈秀兰'].sort());
+  assert.deepEqual(page.items.map((contact) => contact.name), ['Aaron', 'Marco Zhou', 'Susan Lin'].sort());
 }));
 
 test('the export query ignores pagination and returns every match', () => withContext(({ contactService }) => {
   for (let index = 0; index < 12; index += 1) {
     contactService.create(sampleContact({
-      name: `导出${index}`,
+      name: `Export${index}`,
       methods: [{ type: 'phone', value: `1390000100${index}` }],
     }));
   }
   assert.equal(contactService.list({ pageSize: '3' }).items.length, 3);
   assert.equal(contactService.listForExport({}).length, 12);
-  assert.equal(contactService.listForExport({ keyword: '导出1' }).length, 3);
+  assert.equal(contactService.listForExport({ keyword: 'Export1' }).length, 3);
 }));
 
 test('the metadata endpoint describes the method types, groups and limits', () => withContext(({ contactService }) => {
   const meta = contactService.meta();
   assert.equal(meta.methodTypes.length, 7);
   assert.equal(meta.methodTypes[0].type, 'phone');
-  assert.ok(meta.groups.some((group) => group.name === '家人'));
+  assert.ok(meta.groups.some((group) => group.name === 'Family'));
   assert.equal(meta.limits.maxMethodsPerContact, 10);
   assert.ok(meta.sortOptions.some((option) => option.value === 'bookmarked'));
 }));
@@ -193,7 +193,7 @@ test('the method order is preserved for the interface', () => withContext(({ con
     methods: [
       { type: 'wechat', value: 'first_wechat' },
       { type: 'phone', value: '13800006666' },
-      { type: 'address', value: '福州市台江区 2 号' },
+      { type: 'address', value: 'No. 2 Jiaotong Road, Fuzhou' },
     ],
   }));
   assert.deepEqual(

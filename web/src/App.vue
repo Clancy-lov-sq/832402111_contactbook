@@ -144,8 +144,8 @@ onBeforeUnmount(() => {
             v-model="keyword"
             class="search__input"
             type="search"
-            placeholder="搜索姓名、公司、电话、邮箱…"
-            aria-label="搜索联系人"
+            placeholder="Search name, company, phone, email…"
+            aria-label="Search contacts"
             data-testid="search-input"
             @input="onKeywordInput"
           />
@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
             v-else
             type="button"
             class="search__clear"
-            aria-label="清除搜索"
+            aria-label="Clear search"
             data-testid="search-clear"
             @click="clearSearch"
           >
@@ -165,11 +165,11 @@ onBeforeUnmount(() => {
         <div class="topbar__actions">
           <button type="button" class="btn btn--ghost" data-testid="template-button" @click="downloadTemplate">
             <AppIcon name="fileDown" />
-            <span class="btn__text">模板</span>
+            <span class="btn__text">Template</span>
           </button>
           <button type="button" class="btn btn--ghost" data-testid="import-button" @click="openImportDialog">
             <AppIcon name="upload" />
-            <span class="btn__text">导入</span>
+            <span class="btn__text">Import</span>
           </button>
           <div class="menu">
             <button
@@ -180,21 +180,21 @@ onBeforeUnmount(() => {
               @click="book.exportMenuOpen = !book.exportMenuOpen"
             >
               <AppIcon name="download" />
-              <span class="btn__text">{{ book.exporting ? '导出中…' : '导出' }}</span>
+              <span class="btn__text">{{ book.exporting ? 'Exporting…' : 'Export' }}</span>
               <AppIcon name="chevronDown" class="btn__caret" />
             </button>
             <div v-if="book.exportMenuOpen" class="menu__panel" data-testid="export-menu">
               <button type="button" class="menu__item" data-testid="export-filtered" @click="exportWorkbook('filtered')">
-                导出当前筛选 · {{ book.total }} 位
+                Export filtered · {{ book.total }} contacts
               </button>
               <button type="button" class="menu__item" data-testid="export-all" @click="exportWorkbook('all')">
-                导出全部联系人 · {{ book.stats.total }} 位
+                Export all contacts · {{ book.stats.total }} contacts
               </button>
             </div>
           </div>
           <button type="button" class="btn btn--primary" data-testid="create-button" @click="openCreateForm">
             <AppIcon name="plus" />
-            新建联系人
+            New contact
           </button>
         </div>
       </header>
@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
       <main class="content">
         <section class="page-head">
           <div>
-            <p class="page-head__eyebrow">ContactBook · 通讯录</p>
+            <p class="page-head__eyebrow">ContactBook · Address book</p>
             <h1 class="page-head__title" data-testid="view-title">{{ viewTitle }}</h1>
             <p class="page-head__subtitle" data-testid="view-subtitle">{{ viewSubtitle }}</p>
           </div>
@@ -210,15 +210,15 @@ onBeforeUnmount(() => {
             <button
               type="button"
               class="btn btn--ghost btn--icon"
-              title="刷新"
-              aria-label="刷新列表"
+              title="Refresh"
+              aria-label="Refresh list"
               data-testid="refresh-button"
               @click="loadContacts()"
             >
               <AppIcon name="database" />
             </button>
             <label class="select">
-              <span>排序</span>
+              <span>Sort</span>
               <select :value="sortValue" data-testid="sort-select" @change="onSortChange">
                 <option v-for="option in book.sortOptions" :key="option.value" :value="option.value">
                   {{ option.label }}
@@ -232,7 +232,7 @@ onBeforeUnmount(() => {
           <AppIcon name="alert" />
           <span>{{ book.error }}</span>
           <button type="button" class="btn btn--ghost btn--sm banner__action" @click="loadContacts()">
-            重试
+            Retry
           </button>
         </div>
 
@@ -263,7 +263,7 @@ onBeforeUnmount(() => {
 
           <footer class="pagination" data-testid="pagination">
             <p class="pagination__info">
-              第 {{ book.page }} / {{ book.totalPages }} 页 · 共 {{ book.total }} 位联系人
+              Page {{ book.page }} of {{ book.totalPages }} · {{ book.total }} contacts
             </p>
             <div class="pagination__controls">
               <button
@@ -273,7 +273,7 @@ onBeforeUnmount(() => {
                 data-testid="page-prev"
                 @click="setPage(book.page - 1)"
               >
-                上一页
+                Previous
               </button>
               <button
                 v-for="page in pageNumbers"
@@ -293,17 +293,17 @@ onBeforeUnmount(() => {
                 data-testid="page-next"
                 @click="setPage(book.page + 1)"
               >
-                下一页
+                Next
               </button>
               <select
                 class="pagination__size"
                 :value="book.pageSize"
-                aria-label="每页显示数量"
+                aria-label="Contacts per page"
                 data-testid="page-size"
                 @change="setPageSize(Number($event.target.value))"
               >
                 <option v-for="size in book.pageSizes" :key="size" :value="size">
-                  {{ size }} / 页
+                  {{ size }} / page
                 </option>
               </select>
             </div>

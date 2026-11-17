@@ -58,12 +58,12 @@ function setFile(file) {
   }
   if (!/\.xlsx$/i.test(file.name)) {
     state.file = null;
-    state.error = '只支持 .xlsx 格式的 Excel 工作簿，请先在 Excel 中另存为这个格式。';
+    state.error = 'Only .xlsx Excel workbooks are supported — save the file as .xlsx in Excel first.';
     return;
   }
   if (file.size > MAX_BYTES) {
     state.file = null;
-    state.error = '文件不能超过 5 MB，请拆分后再导入。';
+    state.error = 'The file must not exceed 5 MB — split it and import again.';
     return;
   }
   state.file = file;
@@ -102,22 +102,23 @@ async function submit() {
     // read it without reaching into a component.
     book.importDialog.report = result.report;
     const { created, updated } = result.report;
+    const failedLabel = `${result.report.failed} failed row${result.report.failed === 1 ? '' : 's'}`;
     if (created + updated > 0) {
       pushToast({
         tone: 'success',
-        title: '导入完成',
-        message: `新增 ${created} 位，更新 ${updated} 位，失败 ${result.report.failed} 行`,
+        title: 'Import finished',
+        message: `Created ${created}, updated ${updated}, ${failedLabel}`,
       });
     } else {
       pushToast({
         tone: 'info',
-        title: '没有写入新数据',
-        message: `跳过 ${result.report.skipped} 位，失败 ${result.report.failed} 行`,
+        title: 'Nothing was written',
+        message: `Skipped ${result.report.skipped}, ${failedLabel}`,
       });
     }
   } catch (error) {
     state.error = errorText(error);
-    pushToast({ tone: 'error', title: '导入失败', message: errorText(error) });
+    pushToast({ tone: 'error', title: 'Import failed', message: errorText(error) });
   } finally {
     state.busy = false;
   }
@@ -155,18 +156,18 @@ function formatSize(bytes) {
   <Teleport to="body">
     <div v-if="book.importDialog.open" class="center-dialog" data-testid="import-dialog">
       <div class="overlay" style="position: absolute; inset: 0" @click="finish" />
-      <div class="dialog dialog--wide" role="dialog" aria-modal="true" aria-label="导入 Excel">
+      <div class="dialog dialog--wide" role="dialog" aria-modal="true" aria-label="Import Excel">
         <header class="dialog__head">
           <span class="dialog__icon">
             <AppIcon name="upload" />
           </span>
           <div>
-            <h2 class="dialog__title">导入 Excel</h2>
+            <h2 class="dialog__title">Import Excel</h2>
             <p class="dialog__subtitle">
-              一位联系人一行，一种信息一列；同名同联系方式的记录可以跳过或更新。
+              One contact per row, one piece of information per column; duplicates can be skipped or updated.
             </p>
           </div>
-          <button type="button" class="dialog__close" aria-label="关闭" @click="finish">
+          <button type="button" class="dialog__close" aria-label="Close" @click="finish">
             <AppIcon name="x" />
           </button>
         </header>
@@ -195,17 +196,17 @@ function formatSize(bytes) {
               @drop.prevent="onDrop"
             >
               <span class="dropzone__icon"><AppIcon name="fileDown" /></span>
-              <p class="dropzone__title">选择或拖入一个 .xlsx 文件</p>
-              <p class="dropzone__hint">单次最多 2000 行，文件不超过 5 MB</p>
+              <p class="dropzone__title">Choose or drop an .xlsx file</p>
+              <p class="dropzone__hint">Up to 2000 rows and 5 MB per file</p>
             </div>
 
             <div v-if="state.file" class="file-card" data-testid="import-file-card">
               <span class="file-card__icon"><AppIcon name="file" /></span>
               <div>
                 <p class="file-card__name">{{ state.file.name }}</p>
-                <p class="file-card__meta">{{ formatSize(state.file.size) }} · 准备导入</p>
+                <p class="file-card__meta">{{ formatSize(state.file.size) }} · Ready to import</p>
               </div>
-              <button type="button" class="icon-button" aria-label="移除文件" @click="again">
+              <button type="button" class="icon-button" aria-label="Remove file" @click="again">
                 <AppIcon name="x" />
               </button>
             </div>
@@ -218,8 +219,8 @@ function formatSize(bytes) {
                   value="skip"
                   data-testid="import-mode-skip"
                 />
-                <span class="radio-card__title">跳过重复</span>
-                <span class="radio-card__text">同名且联系方式相同的联系人保持不动，只导入新的。</span>
+                <span class="radio-card__title">Skip duplicates</span>
+                <span class="radio-card__text">Same name and method stay untouched; only new contacts are imported.</span>
               </label>
               <label class="radio-card" :class="{ 'is-active': state.mode === 'update' }">
                 <input
@@ -228,32 +229,32 @@ function formatSize(bytes) {
                   value="update"
                   data-testid="import-mode-update"
                 />
-                <span class="radio-card__title">更新已有</span>
-                <span class="radio-card__text">用表格里的内容更新联系人，并把新的联系方式合并进去。</span>
+                <span class="radio-card__title">Update existing</span>
+                <span class="radio-card__text">Update the contact with the workbook values and merge new methods.</span>
               </label>
             </div>
 
             <ul class="hint-list">
               <li>
                 <AppIcon name="check" />
-                <span>第一行是表头，必须包含“姓名”列，列的顺序可以不同。</span>
+                <span>The first row is the header and must contain a Name column; column order is free.</span>
               </li>
               <li>
                 <AppIcon name="check" />
-                <span>电话、邮箱可以有多列（电话1、电话2…），微信、QQ、网址、地址各一列即可。</span>
+                <span>Phone and e-mail may use several columns (Phone 1, Phone 2…); WeChat, QQ, website and address need one column.</span>
               </li>
               <li>
                 <AppIcon name="check" />
-                <span>“是否收藏”填“是”或“否”；分组名称不存在时会自动创建。</span>
+                <span>Bookmarked accepts yes or no; unknown group names are created automatically.</span>
               </li>
               <li>
                 <AppIcon name="check" />
                 <span>
-                  还没有表格？先下载
+                  No workbook yet? Download the
                   <button type="button" class="link-button" data-testid="import-template" @click.stop="downloadTemplate">
-                    导入模板
+                    import template
                   </button>
-                  ，里面带填写说明。
+                  — it ships with instructions.
                 </span>
               </li>
             </ul>
@@ -269,39 +270,39 @@ function formatSize(bytes) {
               <div class="report-summary">
                 <div class="report-tile report-tile--created">
                   <p class="report-tile__value">{{ state.report.created }}</p>
-                  <p class="report-tile__label">新增联系人</p>
+                  <p class="report-tile__label">Created</p>
                 </div>
                 <div class="report-tile report-tile--updated">
                   <p class="report-tile__value">{{ state.report.updated }}</p>
-                  <p class="report-tile__label">更新联系人</p>
+                  <p class="report-tile__label">Updated</p>
                 </div>
                 <div class="report-tile report-tile--skipped">
                   <p class="report-tile__value">{{ state.report.skipped }}</p>
-                  <p class="report-tile__label">跳过重复</p>
+                  <p class="report-tile__label">Skipped</p>
                 </div>
                 <div class="report-tile report-tile--failed">
                   <p class="report-tile__value">{{ state.report.failed }}</p>
-                  <p class="report-tile__label">失败行</p>
+                  <p class="report-tile__label">Failed rows</p>
                 </div>
               </div>
 
               <p class="field__hint" style="margin-top: 10px">
-                工作表“{{ state.report.sheetName }}”第 {{ state.report.headerRow }} 行为表头，
-                共读取 {{ state.report.totalRows }} 行；识别到 {{ state.report.columns.length }} 列<span
+                Sheet “{{ state.report.sheetName }}”, header on row {{ state.report.headerRow }},
+                {{ state.report.totalRows }} rows read, {{ state.report.columns.length }} columns recognised<span
                   v-if="state.report.ignoredColumns.length > 0"
-                >，忽略 {{ state.report.ignoredColumns.length }} 列</span>。
+                >, {{ state.report.ignoredColumns.length }} columns ignored</span>.
               </p>
 
               <div v-if="failedRows.length > 0" style="margin-top: 12px">
                 <div class="section-label">
-                  <span>失败的行</span>
-                  <span>{{ failedRows.length }} 行</span>
+                  <span>Failed rows</span>
+                  <span>{{ failedRows.length }} rows</span>
                 </div>
                 <div class="report-table">
                   <div v-for="row in failedRows" :key="`failed-${row.row}`" class="report-row">
-                    <span class="report-row__row">第 {{ row.row }} 行</span>
+                    <span class="report-row__row">Row {{ row.row }}</span>
                     <span class="report-row__name">{{ row.name }}</span>
-                    <span class="tag tag--failed">失败</span>
+                    <span class="tag tag--failed">Failed</span>
                     <span class="report-row__message">{{ row.message }}</span>
                   </div>
                 </div>
@@ -309,15 +310,15 @@ function formatSize(bytes) {
 
               <div v-if="importedRows.length > 0" style="margin-top: 12px">
                 <div class="section-label">
-                  <span>写入的行</span>
-                  <span>{{ importedRows.length }} 行</span>
+                  <span>Imported rows</span>
+                  <span>{{ importedRows.length }} rows</span>
                 </div>
                 <div class="report-table">
                   <div v-for="row in importedRows" :key="`ok-${row.row}`" class="report-row">
-                    <span class="report-row__row">第 {{ row.row }} 行</span>
+                    <span class="report-row__row">Row {{ row.row }}</span>
                     <span class="report-row__name">{{ row.name }}</span>
                     <span class="tag" :class="`tag--${row.status}`">
-                      {{ row.status === 'created' ? '新增' : (row.status === 'updated' ? '更新' : '跳过') }}
+                      {{ row.status === 'created' ? 'Created' : (row.status === 'updated' ? 'Updated' : 'Skipped') }}
                     </span>
                     <span class="report-row__message">{{ row.message }}</span>
                   </div>
@@ -329,7 +330,7 @@ function formatSize(bytes) {
 
         <footer class="dialog__foot">
           <template v-if="!state.report">
-            <button type="button" class="btn btn--ghost" @click="finish">取消</button>
+            <button type="button" class="btn btn--ghost" @click="finish">Cancel</button>
             <button
               type="button"
               class="btn btn--primary"
@@ -338,16 +339,16 @@ function formatSize(bytes) {
               @click="submit"
             >
               <AppIcon name="upload" />
-              {{ state.busy ? '正在导入…' : '开始导入' }}
+              {{ state.busy ? 'Importing…' : 'Start import' }}
             </button>
           </template>
           <template v-else>
             <button type="button" class="btn btn--ghost" data-testid="import-again" @click="again">
-              再导入一个文件
+              Import another file
             </button>
             <button type="button" class="btn btn--primary" data-testid="import-finish" @click="finish">
               <AppIcon name="check" />
-              完成
+              Done
             </button>
           </template>
         </footer>

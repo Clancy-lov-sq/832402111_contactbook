@@ -12,7 +12,7 @@ const { AppError, ErrorCode } = require('../utils/errors');
  *
  * One row per contact, one column per piece of information: the layout the
  * assignment asks for. A type that may appear more than once (a phone number, an
- * e-mail address) gets numbered columns (`电话1`, `电话2`, …); the number of
+ * e-mail address) gets numbered columns (`Phone 1`, `Phone 2`, …); the number of
  * columns is derived from the data on export and read back from the header on
  * import, so an exported workbook can always be imported again without losing a
  * value.
@@ -25,44 +25,44 @@ const { AppError, ErrorCode } = require('../utils/errors');
 
 /** Fields of a contact that are exported as plain columns. */
 const CONTACT_COLUMNS = Object.freeze([
-  { key: 'index', header: '序号', width: 6, kind: 'index' },
-  { key: 'name', header: '姓名', width: 14, kind: 'field', required: true },
-  { key: 'group', header: '分组', width: 10, kind: 'field' },
-  { key: 'company', header: '公司', width: 22, kind: 'field' },
-  { key: 'title', header: '职位', width: 14, kind: 'field' },
-  { key: 'note', header: '备注', width: 30, kind: 'field' },
-  { key: 'bookmarked', header: '是否收藏', width: 10, kind: 'field' },
-  { key: 'bookmarkedAt', header: '收藏时间', width: 20, kind: 'field' },
+  { key: 'index', header: '#', width: 6, kind: 'index' },
+  { key: 'name', header: 'Name', width: 18, kind: 'field', required: true },
+  { key: 'group', header: 'Group', width: 12, kind: 'field' },
+  { key: 'company', header: 'Company', width: 22, kind: 'field' },
+  { key: 'title', header: 'Title', width: 18, kind: 'field' },
+  { key: 'note', header: 'Note', width: 32, kind: 'field' },
+  { key: 'bookmarked', header: 'Bookmarked', width: 12, kind: 'field' },
+  { key: 'bookmarkedAt', header: 'Bookmarked at', width: 20, kind: 'field' },
 ]);
 
 /** Columns appended after the contact fields. */
 const TRAILING_COLUMNS = Object.freeze([
-  { key: 'createdAt', header: '创建时间', width: 20, kind: 'field' },
-  { key: 'updatedAt', header: '更新时间', width: 20, kind: 'field' },
+  { key: 'createdAt', header: 'Created at', width: 20, kind: 'field' },
+  { key: 'updatedAt', header: 'Updated at', width: 20, kind: 'field' },
 ]);
 
 /** Header aliases accepted by the importer, per canonical field. */
 const HEADER_ALIASES = Object.freeze({
-  name: ['姓名', '名字', '联系人', '联系人姓名', 'name', 'contactname'],
-  group: ['分组', '组别', '分组名称', '群组', 'group', 'groupname'],
-  company: ['公司', '单位', '公司名称', 'company'],
-  title: ['职位', '职务', 'title', 'jobtitle'],
-  note: ['备注', '说明', 'note', 'remark', 'remarks'],
-  bookmarked: ['是否收藏', '收藏', 'bookmark', 'bookmarked', 'favorite', 'starred'],
-  bookmarkedAt: ['收藏时间', 'bookmarkedat'],
-  createdAt: ['创建时间', 'createdat'],
-  updatedAt: ['更新时间', '修改时间', 'updatedat'],
+  name: ['name', 'fullname', 'contact', 'contactname'],
+  group: ['group', 'groupname', 'category'],
+  company: ['company', 'organization', 'organisation'],
+  title: ['title', 'jobtitle', 'position'],
+  note: ['note', 'notes', 'remark', 'remarks'],
+  bookmarked: ['bookmarked', 'bookmark', 'favorite', 'favourite', 'starred'],
+  bookmarkedAt: ['bookmarkedat', 'bookmarkdate'],
+  createdAt: ['createdat', 'created'],
+  updatedAt: ['updatedat', 'updated', 'lastupdated'],
 });
 
-/** Regexes that recognise a numbered contact-method column (`电话2`). */
+/** Regexes that recognise a numbered contact-method column (`Phone 2`). */
 const METHOD_HEADER_PATTERNS = Object.freeze([
-  { type: 'phone', pattern: /^(电话|手机|手机号|手机号码|电话号码|联系电话|phone|mobile|tel)(\d*)$/ },
-  { type: 'email', pattern: /^(邮箱|电子邮箱|邮件|电子邮件|email|e-mail|mail)(\d*)$/ },
-  { type: 'wechat', pattern: /^(微信|微信号|wechat|weixin)(\d*)$/ },
-  { type: 'qq', pattern: /^(qq|qq号)(\d*)$/ },
-  { type: 'website', pattern: /^(网址|网站|website|url|web|homepage)(\d*)$/ },
-  { type: 'address', pattern: /^(地址|住址|通讯地址|address|addr)(\d*)$/ },
-  { type: 'other', pattern: /^(其他|其它|自定义|other|others)(\d*)$/ },
+  { type: 'phone', pattern: /^(phone|phones|mobile|tel|telephone|cell)(\d*)$/ },
+  { type: 'email', pattern: /^(email|emails|mail|e-mail)(\d*)$/ },
+  { type: 'wechat', pattern: /^(wechat|weixin)(\d*)$/ },
+  { type: 'qq', pattern: /^(qq)(\d*)$/ },
+  { type: 'website', pattern: /^(website|web|url|homepage|site)(\d*)$/ },
+  { type: 'address', pattern: /^(address|addr|location)(\d*)$/ },
+  { type: 'other', pattern: /^(other|others|custom)(\d*)$/ },
 ]);
 
 /** Column header style reused by the export and the template. */
@@ -73,7 +73,8 @@ const HEADER_FILL = Object.freeze({
 });
 
 /** @param {*} value @returns {string} */
-function cellText(value) {  if (value === null || value === undefined) {
+function cellText(value) {
+  if (value === null || value === undefined) {
     return '';
   }
   if (typeof value === 'string') {
@@ -83,7 +84,7 @@ function cellText(value) {  if (value === null || value === undefined) {
     return String(value);
   }
   if (typeof value === 'boolean') {
-    return value ? '是' : '否';
+    return value ? 'Yes' : 'No';
   }
   if (value instanceof Date) {
     return toSqlDateTime(value);
@@ -125,7 +126,7 @@ function lastColumnLetter(count) {
 /** Removes spaces and brackets and lower-cases a header for matching. */
 function canonicalizeHeader(text) {
   return String(text)
-    .replace(/[\s\u3000（）()【】[\]]/g, '')
+    .replace(/[\s()\[\]]/g, '')
     .toLowerCase();
 }
 
@@ -140,7 +141,7 @@ function classifyHeader(header) {
   if (canonical === '') {
     return { kind: 'ignored' };
   }
-  if (canonical === '序号' || canonical === 'no' || canonical === 'index') {
+  if (canonical === '#' || canonical === 'no' || canonical === 'index') {
     return { kind: 'ignored', key: 'index' };
   }
   for (const [key, aliases] of Object.entries(HEADER_ALIASES)) {
@@ -188,7 +189,7 @@ function buildMethodColumns(contacts) {
       columns.push({
         type: definition.type,
         slot,
-        header: numbered ? `${definition.excelPrefix}${slot}` : definition.excelPrefix,
+        header: numbered ? `${definition.excelPrefix} ${slot}` : definition.excelPrefix,
       });
     }
   }
@@ -264,7 +265,7 @@ function writeContactRow(worksheet, rowNumber, contact, columns, index) {
     } else if (column.key === 'group') {
       value = contact.groupName || '';
     } else if (column.key === 'bookmarked') {
-      value = contact.isBookmarked ? '是' : '否';
+      value = contact.isBookmarked ? 'Yes' : 'No';
     } else if (column.key === 'bookmarkedAt') {
       value = contact.bookmarkedAt || '';
     } else {
@@ -311,7 +312,7 @@ function buildExportWorkbook(contacts, options = {}) {
   workbook.created = new Date();
   workbook.modified = new Date();
 
-  const worksheet = workbook.addWorksheet('通讯录', {
+  const worksheet = workbook.addWorksheet('Contacts', {
     views: [{ state: 'frozen', ySplit: 3 }],
     properties: { defaultRowHeight: 20 },
   });
@@ -320,9 +321,10 @@ function buildExportWorkbook(contacts, options = {}) {
   const headerRow = 3;
 
   const now = new Date();
+  const label = contacts.length === 1 ? 'contact' : 'contacts';
   const title =
     options.title ||
-    `通讯录 · 共 ${contacts.length} 位联系人 · 导出于 ${toSqlDateTime(now).slice(0, 16)}`;
+    `Contacts · ${contacts.length} ${label} · exported ${toSqlDateTime(now).slice(0, 16)}`;
   worksheet.getCell(1, 1).value = title;
 
   columns.forEach((column, index) => {
@@ -364,7 +366,7 @@ function buildExportWorkbook(contacts, options = {}) {
         cell.dataValidation = {
           type: 'list',
           allowBlank: true,
-          formulae: ['"是,否"'],
+          formulae: ['"Yes,No"'],
         };
       }
     });
@@ -399,23 +401,23 @@ async function createExportBuffer(contacts) {
 
 /** Writes the "how to fill this workbook" sheet. */
 function writeInstructionSheet(workbook, columns) {
-  const sheet = workbook.addWorksheet('填写说明');
-  sheet.getColumn(1).width = 22;
+  const sheet = workbook.addWorksheet('Instructions');
+  sheet.getColumn(1).width = 26;
   sheet.getColumn(2).width = 96;
 
   const rows = [
-    ['项目', '说明'],
-    ['用途', '本文件既可以直接填写后导入，也可以作为一次导出的结果再次导入。'],
-    ['必填列', '姓名。其余列都可以留空。'],
-    ['一行一位联系人', '同一行的所有列都属于同一位联系人；不要在同一位联系人下面插入空行。'],
-    ['重复的联系方式', '电话、邮箱等可以出现在多个编号列中（电话1、电话2…），一列一个值。'],
-    ['分组', '填写分组名称。不存在分组会自动创建，留空表示未分组。'],
-    ['是否收藏', '填写“是”或“否”；留空按“否”处理。'],
-    ['导入模式', '跳过重复：同名且联系方式相同的联系人被跳过；更新已有：用表格内容更新联系人并合并联系方式。'],
-    ['校验规则', '电话至少 6 位数字，邮箱需包含 @ 与域名，QQ 为 5–12 位数字，网址以 http(s):// 开头或为域名形式。'],
-    ['行数上限', '单次最多导入 2000 行，文件不超过 5 MB。'],
-    ['本表列顺序', columns.map((column) => column.header).join(' | ')],
-    ['示例', '姓名=林澄月，分组=朋友，电话1=13800001111，邮箱1=chengyue@example.com，是否收藏=是'],
+    ['Item', 'Description'],
+    ['Purpose', 'Fill this file in and import it, or re-import a previously exported workbook.'],
+    ['Required column', 'Name. Every other column may stay empty.'],
+    ['One row per contact', 'All columns of a row belong to the same contact; do not insert blank rows between contacts.'],
+    ['Repeated methods', 'Phone and email may appear in several numbered columns (Phone 1, Phone 2…), one value per column.'],
+    ['Group', 'A group name; an unknown name is created automatically, an empty cell means no group.'],
+    ['Bookmarked', 'Fill in Yes or No; an empty cell is treated as No.'],
+    ['Import mode', 'Skip duplicates: a contact with the same name and method is skipped. Update existing: the workbook updates it and merges new methods.'],
+    ['Validation', 'Phone needs at least 6 digits, email needs @ and a domain, QQ is 5–12 digits, a website starts with http(s):// or is a bare domain.'],
+    ['Row limit', 'At most 2000 rows per import and 5 MB per file.'],
+    ['Columns of this file', columns.map((column) => column.header).join(' | ')],
+    ['Example', 'Name=Sophie Su, Group=Friends, Phone 1=13800001111, Email 1=sophie.su@example.com, Bookmarked=Yes'],
   ];
   rows.forEach((row, index) => {
     const line = sheet.getRow(index + 1);
@@ -444,7 +446,7 @@ function writeInstructionSheet(workbook, columns) {
 async function createTemplateBuffer() {
   const workbook = new ExcelJS.Workbook();
   workbook.creator = 'ContactBook';
-  const worksheet = workbook.addWorksheet('通讯录', {
+  const worksheet = workbook.addWorksheet('Contacts', {
     views: [{ state: 'frozen', ySplit: 3 }],
     properties: { defaultRowHeight: 20 },
   });
@@ -459,7 +461,7 @@ async function createTemplateBuffer() {
       methodColumns.push({
         type: definition.type,
         slot,
-        header: `${definition.excelPrefix}${slot}`,
+        header: `${definition.excelPrefix} ${slot}`,
         key: `method_${definition.type}_${slot}`,
         width: 22,
         kind: 'method',
@@ -468,7 +470,7 @@ async function createTemplateBuffer() {
   }
   const allColumns = [...CONTACT_COLUMNS, ...methodColumns, ...TRAILING_COLUMNS];
 
-  worksheet.getCell(1, 1).value = '通讯录模板 · 请从第 4 行开始填写 · 姓名必填 · 填写说明见第二个工作表';
+  worksheet.getCell(1, 1).value = 'Contacts template · fill from row 4 · Name is required · instructions on the second sheet';
   allColumns.forEach((column, index) => {
     worksheet.getColumn(index + 1).width = column.width;
     worksheet.getCell(3, index + 1).value = column.header;
@@ -496,12 +498,12 @@ async function createTemplateBuffer() {
     worksheet.getCell(rowNumber, bookmarkedColumn).dataValidation = {
       type: 'list',
       allowBlank: true,
-      formulae: ['"是,否"'],
+      formulae: ['"Yes,No"'],
     };
     worksheet.getCell(rowNumber, groupColumn).dataValidation = {
       type: 'list',
       allowBlank: true,
-      formulae: ['"家人,朋友,同事,客户,其他"'],
+      formulae: ['"Family,Friends,Colleagues,Clients,Others"'],
     };
   }
 
@@ -549,7 +551,7 @@ function findHeader(worksheet) {
 
 /** @param {ExcelJS.Worksheet} worksheet @returns {ExcelJS.Worksheet} */
 function pickWorksheet(workbook) {
-  const preferred = workbook.getWorksheet('通讯录');
+  const preferred = workbook.getWorksheet('Contacts');
   if (preferred) {
     return preferred;
   }
@@ -592,7 +594,7 @@ async function parseImportWorkbook(buffer, options = {}) {
   const header = findHeader(worksheet);
   if (!header) {
     throw new AppError(ErrorCode.IMPORT_HEADER_MISSING, {
-      message: 'The workbook has no header row containing a 姓名 (Name) column',
+      message: 'The workbook has no header row containing a Name column',
       detail: { sheetName: worksheet.name },
     });
   }
@@ -610,7 +612,7 @@ async function parseImportWorkbook(buffer, options = {}) {
 
   const methodCountByType = new Map();
   // A column that the workbook does not have reads as an empty value, so an
-  // export without (for example) a 公司 column still cannot crash the parser.
+  // export without (for example) a Company column still cannot crash the parser.
   const valueOf = (row, columnNumber) => (
     columnNumber === undefined ? '' : cellText(row.getCell(columnNumber).value)
   );
@@ -651,9 +653,9 @@ async function parseImportWorkbook(buffer, options = {}) {
 
     const problems = [];
     if (name === '') {
-      problems.push('姓名不能为空');
+      problems.push('Name is required');
     } else if (name.length > 40) {
-      problems.push(`姓名超过 40 个字符（当前 ${name.length} 个）`);
+      problems.push(`Name is longer than 40 characters (${name.length})`);
     }
 
     let bookmarked = false;
@@ -661,12 +663,12 @@ async function parseImportWorkbook(buffer, options = {}) {
     if (bookmarkedText !== '') {
       bookmarkedProvided = true;
       const text = bookmarkedText.toLowerCase();
-      if (['是', 'true', '1', 'yes', 'y', '收藏'].includes(text)) {
+      if (['yes', 'true', '1', 'y'].includes(text)) {
         bookmarked = true;
-      } else if (['否', 'false', '0', 'no', 'n'].includes(text)) {
+      } else if (['no', 'false', '0', 'n'].includes(text)) {
         bookmarked = false;
       } else {
-        problems.push(`“是否收藏”只能填写“是”或“否”，当前为“${bookmarkedText}”`);
+        problems.push(`Bookmarked must be Yes or No, received "${bookmarkedText}"`);
       }
     }
 
@@ -675,16 +677,16 @@ async function parseImportWorkbook(buffer, options = {}) {
     for (const raw of rawMethods) {
       const definition = findMethodType(raw.type);
       if (raw.value.length > 120) {
-        problems.push(`${definition.label}的值超过 120 个字符`);
+        problems.push(`${definition.label} value is longer than 120 characters`);
         continue;
       }
       if (!isValidMethodValue(raw.type, raw.value)) {
-        problems.push(`“${raw.value}”不是有效的${definition.label}格式`);
+        problems.push(`"${raw.value}" is not a valid ${definition.label.toLowerCase()} value`);
         continue;
       }
       const key = `${raw.type}:${raw.value.toLowerCase()}`;
       if (seen.has(key)) {
-        problems.push(`${definition.label}“${raw.value}”在同一个联系人中出现两次`);
+        problems.push(`${definition.label} "${raw.value}" appears twice in one contact`);
         continue;
       }
       seen.add(key);
@@ -693,10 +695,10 @@ async function parseImportWorkbook(buffer, options = {}) {
     }
 
     if (methods.length > 10) {
-      problems.push('一位联系人最多 10 条联系方式');
+      problems.push('A contact may have at most 10 contact methods');
     }
     if (note.length > 500) {
-      problems.push('备注超过 500 个字符');
+      problems.push('Note is longer than 500 characters');
     }
 
     const record = {

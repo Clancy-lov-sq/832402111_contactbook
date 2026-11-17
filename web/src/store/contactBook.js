@@ -74,7 +74,7 @@ export const book = reactive({
     open: false,
     title: '',
     message: '',
-    confirmLabel: '确定',
+    confirmLabel: 'Confirm',
     tone: 'danger',
     busy: false,
     action: null,
@@ -88,27 +88,27 @@ export const book = reactive({
 /** The title of the current view. */
 export const viewTitle = computed(() => {
   if (book.filters.bookmarked) {
-    return '我的收藏';
+    return 'Favorites';
   }
   if (book.filters.groupId === 'all') {
-    return '全部联系人';
+    return 'All contacts';
   }
   const group = book.stats.groups.find((item) => item.id === book.filters.groupId);
-  return group ? group.name : '未分组';
+  return group ? group.name : 'No group';
 });
 
 /** A sentence that describes what is currently listed. */
 export const viewSubtitle = computed(() => {
   if (book.filters.keyword) {
-    return `搜索“${book.filters.keyword}”的结果`;
+    return `Results for “${book.filters.keyword}”`;
   }
   if (book.filters.bookmarked) {
-    return '星标过的联系人，随时快速拨号';
+    return 'Bookmarked contacts for quick access';
   }
   if (book.filters.groupId === 'all') {
-    return `共 ${book.stats.total} 位联系人，${book.stats.methodCount} 条联系方式`;
+    return `${book.stats.total} contacts · ${book.stats.methodCount} contact methods`;
   }
-  return `该分组共有 ${book.total} 位联系人`;
+  return `${book.total} contacts in this group`;
 });
 
 /** Whether any filter differs from the default view. */
@@ -147,7 +147,7 @@ export async function loadContacts() {
     book.error = '';
   } catch (error) {
     book.error = errorText(error);
-    pushToast({ tone: 'error', title: '加载失败', message: errorText(error) });
+    pushToast({ tone: 'error', title: 'Could not load contacts', message: errorText(error) });
   } finally {
     book.loading = false;
   }
@@ -167,7 +167,7 @@ export async function initBook() {
   } catch (error) {
     book.error = errorText(error);
     book.ready = true;
-    pushToast({ tone: 'error', title: '无法加载通讯录', message: errorText(error) });
+    pushToast({ tone: 'error', title: 'Could not load the address book', message: errorText(error) });
   }
 }
 
@@ -278,7 +278,7 @@ export async function toggleBookmark(contact) {
     }
     pushToast({
       tone: next ? 'success' : 'default',
-      title: next ? '已加入收藏' : '已取消收藏',
+      title: next ? 'Added to favorites' : 'Removed from favorites',
       message: contact.name,
     });
     if (book.filters.bookmarked) {
@@ -286,7 +286,7 @@ export async function toggleBookmark(contact) {
     }
   } catch (error) {
     contact.isBookmarked = previous;
-    pushToast({ tone: 'error', title: '收藏失败', message: errorText(error) });
+    pushToast({ tone: 'error', title: 'Could not update the bookmark', message: errorText(error) });
   }
 }
 
@@ -305,7 +305,7 @@ export async function openDetail(id) {
     const result = await api.get(id);
     book.detail = result.contact;
   } catch (error) {
-    pushToast({ tone: 'error', title: '无法打开联系人', message: errorText(error) });
+    pushToast({ tone: 'error', title: 'Could not open the contact', message: errorText(error) });
   } finally {
     book.detailLoading = false;
   }
@@ -356,10 +356,10 @@ export async function saveContact(payload) {
   try {
     if (book.form.contact) {
       await api.update(book.form.contact.id, payload);
-      pushToast({ tone: 'success', title: '联系人已更新', message: payload.name });
+      pushToast({ tone: 'success', title: 'Contact updated', message: payload.name });
     } else {
       await api.create(payload);
-      pushToast({ tone: 'success', title: '联系人已添加', message: payload.name });
+      pushToast({ tone: 'success', title: 'Contact created', message: payload.name });
     }
     book.form.open = false;
     book.form.saving = false;
@@ -371,7 +371,7 @@ export async function saveContact(payload) {
     const firstProblem = error.fields && error.fields[0]
       ? errorText({ code: error.fields[0].code, message: error.fields[0].message })
       : errorText(error);
-    pushToast({ tone: 'error', title: '保存失败', message: firstProblem });
+    pushToast({ tone: 'error', title: 'Save failed', message: firstProblem });
     return false;
   }
 }
@@ -387,9 +387,9 @@ export async function saveContact(payload) {
 export function askDelete(contact) {
   book.confirm = {
     open: true,
-    title: '删除联系人',
-    message: `确定要删除「${contact.name}」吗？该联系人的所有联系方式会一起删除，操作不可撤销。`,
-    confirmLabel: '删除',
+    title: 'Delete contact',
+    message: `Delete “${contact.name}”? All of its contact methods are removed as well; this cannot be undone.`,
+    confirmLabel: 'Delete',
     tone: 'danger',
     busy: false,
     action: async () => {
@@ -398,7 +398,7 @@ export function askDelete(contact) {
         book.detail = null;
       }
       await loadContacts();
-      pushToast({ tone: 'success', title: '联系人已删除', message: contact.name });
+      pushToast({ tone: 'success', title: 'Contact deleted', message: contact.name });
     },
   };
 }
@@ -414,7 +414,7 @@ export async function confirmAction() {
     await book.confirm.action();
     book.confirm.open = false;
   } catch (error) {
-    pushToast({ tone: 'error', title: '操作失败', message: errorText(error) });
+    pushToast({ tone: 'error', title: 'Action failed', message: errorText(error) });
   } finally {
     book.confirm.busy = false;
     book.confirm.action = null;
@@ -473,11 +473,11 @@ export async function exportWorkbook(scope = 'filtered') {
     saveBlob(blob, fileName);
     pushToast({
       tone: 'success',
-      title: '导出完成',
-      message: `${rowCount} 位联系人已保存为 ${fileName}`,
+      title: 'Export ready',
+      message: `${rowCount} contacts saved as ${fileName}`,
     });
   } catch (error) {
-    pushToast({ tone: 'error', title: '导出失败', message: errorText(error) });
+    pushToast({ tone: 'error', title: 'Export failed', message: errorText(error) });
   } finally {
     book.exporting = false;
   }
@@ -488,8 +488,8 @@ export async function downloadTemplate() {
   try {
     const { blob, fileName } = await api.downloadTemplate();
     saveBlob(blob, fileName);
-    pushToast({ tone: 'info', title: '模板已下载', message: fileName });
+    pushToast({ tone: 'info', title: 'Template downloaded', message: fileName });
   } catch (error) {
-    pushToast({ tone: 'error', title: '模板下载失败', message: errorText(error) });
+    pushToast({ tone: 'error', title: 'Could not download the template', message: errorText(error) });
   }
 }

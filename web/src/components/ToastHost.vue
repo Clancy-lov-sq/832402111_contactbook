@@ -30,7 +30,7 @@ const iconByTone = computed(() => ({
           <p class="toast__title">{{ toast.title }}</p>
           <p v-if="toast.message" class="toast__message">{{ toast.message }}</p>
         </div>
-        <button class="toast__close" type="button" aria-label="关闭提示" @click="dismissToast(toast.id)">
+        <button class="toast__close" type="button" aria-label="Dismiss notification" @click="dismissToast(toast.id)">
           ×
         </button>
       </div>

@@ -250,10 +250,10 @@ class ContactService {
       limits: this.config.limits,
       pageSizes: this.config.pageSizes,
       sortOptions: [
-        { value: 'updated', label: '最近更新' },
-        { value: 'created', label: '最近添加' },
-        { value: 'name', label: '姓名排序' },
-        { value: 'bookmarked', label: '收藏优先' },
+        { value: 'updated', label: 'Last updated' },
+        { value: 'created', label: 'Recently added' },
+        { value: 'name', label: 'Name A–Z' },
+        { value: 'bookmarked', label: 'Favorites first' },
       ],
     };
   }
