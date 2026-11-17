@@ -423,8 +423,8 @@ function cancel() {
                 </button>
               </div>
               <p class="field__hint">
-                The type of a contact method sets its format rules; with a single method you can ignore
-                “Primary”, because the first one becomes primary automatically.
+                The type of a contact method sets its format rules; with a single method you can
+                ignore “Primary”, because the first one becomes primary automatically.
               </p>
             </div>
           </div>

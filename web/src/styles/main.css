@@ -2148,6 +2148,13 @@ kbd {
   padding: 16px;
 }
 
+/* The overlay is a sibling of the dialog: keep the blurred, dimming layer below
+   it, otherwise the dialog itself is painted through the overlay and looks
+   blurry and washed out. */
+.center-dialog > .overlay {
+  z-index: 0;
+}
+
 .center-dialog > .dialog {
   position: relative;
   z-index: 1;

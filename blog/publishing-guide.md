@@ -2,7 +2,7 @@
 
 这份文件不是博客正文，而是**交作业当天的操作手册**。按顺序照做即可：推送 GitHub → 核对链接 → 发布 CSDN → 提交作业帖。命令以 Windows PowerShell 为准，macOS/Linux 把路径写法换一下即可。
 
-> 当前仓库状态：本地已有 **15 次提交**，工作区干净；`blog/assignment-blog.md` 是英文博客正文，`blog/images/` 里有 19 张配图（17 张截图、1 张提交历史图、1 个演示 GIF）。仓库名 `832402111_contactbook`，GitHub 账号 `Clancy-lov-sq`。
+> 当前仓库状态：本地已有 **16 次提交**，工作区干净；`blog/assignment-blog.md` 是英文博客正文，`blog/images/` 里有 19 张配图（17 张截图、1 张提交历史图、1 个演示 GIF）。仓库名 `832402111_contactbook`，GitHub 账号 `Clancy-lov-sq`。
 
 ---
 
@@ -42,7 +42,7 @@ git push -u origin main                # 重新弹窗登录
 6. 推送成功后打开 <https://github.com/Clancy-lov-sq/832402111_contactbook>，确认：
    - 仓库是 Public，未登录也能打开；
    - 首页显示 README；
-   - **Commits** 页面显示 15 条提交，作者是本人；
+   - **Commits** 页面显示 16 条提交，作者是本人；
    - `codestyle.md`、`docs/API.md`、`docs/DESIGN.md`、`deploy/README.md` 都能点开；
    - `screenshots/` 里的图片能在网页上直接预览。
 
@@ -200,7 +200,7 @@ npm start
 
 ## 第 8 步：提交前自检清单
 
-- [ ] GitHub 仓库 Public，Commits 页面 ≥ 3 次（当前 15 次），作者是本人。
+- [ ] GitHub 仓库 Public，Commits 页面 ≥ 3 次（当前 16 次），作者是本人。
 - [ ] 仓库首页 README 正常显示，代码规范、API、设计、部署文档都能打开。
 - [ ] 博客已发布（不是草稿），审核通过，图片全部正常。
 - [ ] 博客包含：项目地址、提交历史截图与提交数、实现思路、程序截图与演示、分工说明（单人项目）、PSP 表。

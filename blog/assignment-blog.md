@@ -465,12 +465,12 @@ This is an individual project; the contribution breakdown is:
 
 | Contributor | Commits | Share |
 | --- | ---: | ---: |
-| 832402111 (Chenyu Lin) | 15 | 100% |
-| Total | 15 | 100% |
+| 832402111 (Chenyu Lin) | 16 | 100% |
+| Total | 16 | 100% |
 
 ![Git commit history](images/commits.png)
 
-> The image above was rendered from real `git log` output (script `tools/render-commits.py`). It was rendered when the repository already held 13 commits; commit 14 then added the refreshed screenshots together with this image itself, and commit 15 rewrote the Chinese publishing guide, so the Commits page on GitHub shows 15 records, with the same author and the same order. The order and the purpose of each commit are as follows:
+> The image above was rendered from real `git log` output (script `tools/render-commits.py`). It was rendered when the repository already held 13 commits; commit 14 then added the refreshed screenshots together with this image itself, commit 15 rewrote the Chinese publishing guide, and commit 16 fixed the modal stacking so the dialogs are sharp in the screenshots, so the Commits page on GitHub shows 16 records, with the same author and the same order. The order and the purpose of each commit are as follows:
 
 | # | Date | Commit message |
 | ---: | --- | --- |
@@ -489,6 +489,7 @@ This is an individual project; the contribution breakdown is:
 | 13 | 2026-11-17 | `docs: rewrite the documentation and blog in English` |
 | 14 | 2026-11-17 | `docs(blog): refresh the screenshots and commit history image` |
 | 15 | 2026-11-17 | `docs: rewrite the publishing guide in Chinese` |
+| 16 | 2026-11-17 | `fix(web): keep modal dialogs above the blurred overlay` |
 
 The count is far above the three commits the assignment asks for, and each commit maps to a stage that can be explained on its own: skeleton, then storage, then business logic, then import/export, then tests, then the front end, then documentation, then deployment, and finally the blog.
 
@@ -558,6 +559,6 @@ The biggest thing this assignment taught me was not how to write a contact book,
 - Get the **data model** right first and favorites, multiple methods and import/export all follow naturally. The three tables cost a little more design time than stuffing a pile of columns into the contact row, but saved the repeated table migrations later.
 - **Import and export are not "read a file, write a file"**: they are a small data-exchange protocol. How columns are numbered, how the header is recognized, how duplicates are decided and how errors come back all have to be settled in advance.
 - **Tests and demo scripts buy back time**: after changing one layer, 78 tests tell me whether something else broke, and the capture script keeps every figure in this post tied to the current code.
-- One person has no coordination problem, but **the commit log is the evidence of the process**: 15 commits split by stage make it easy to see what each step did and why it was done that way.
+- One person has no coordination problem, but **the commit log is the evidence of the process**: 16 commits split by stage make it easy to see what each step did and why it was done that way.
 
 Finally, thank you to the course for the chance to practice; if a cloud server is added later, I will deploy it following `deploy/README.md` and add the public URL to the table above.
